@@ -5,15 +5,18 @@ import java.util.ArrayList;
 public class Agent extends Person {
     private int id;
     private TypeAgent typeAgent;
-    private Departement departement;
+    private Department department;
     private ArrayList<Payment> payments;
 
-    public Agent(String firstName, String lastName, String email, String password, int id, TypeAgent typeAgent, Departement departement, ArrayList<Payment> payments) {
+    public Agent(String firstName, String lastName, String email, String password, int id, TypeAgent typeAgent, Department department, ArrayList<Payment> payments) {
         super(firstName, lastName, email, password);
         this.id = id;
         this.typeAgent = typeAgent;
-        this.departement = departement;
+        this.department = department;
         this.payments = payments;
+    }
+
+    public Agent() {
     }
 
     public int getId() {
@@ -32,12 +35,12 @@ public class Agent extends Person {
         this.typeAgent = typeAgent;
     }
 
-    public Departement getDepartement() {
-        return departement;
+    public Department getDepartement() {
+        return department;
     }
 
-    public void setDepartement(Departement departement) {
-        this.departement = departement;
+    public void setDepartement(Department department) {
+        this.department = department;
     }
 
     public ArrayList<Payment> getPayments() {
@@ -50,10 +53,10 @@ public class Agent extends Person {
 
     @Override
     public String toString() {
-        return "Agent{" +
+        return super.toString() + "Agent{" +
                 "id=" + id +
                 ", typeAgent=" + typeAgent +
-                ", departement=" + departement +
+                ", department=" + department +
                 ", payments=" + payments +
                 '}';
     }

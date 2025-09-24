@@ -13,6 +13,9 @@ public abstract class Person {
         this.password = password;
     }
 
+    public Person() {
+    }
+
     public String getFirstName() {
         return firstName;
     }

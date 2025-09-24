@@ -2,13 +2,13 @@ package Model;
 
 import java.util.ArrayList;
 
-public class Departement {
+public class Department {
     private int id;
     private String name;
     private Agent responsable;
     private ArrayList<Agent> agents;
 
-    public Departement(int id, String name, Agent responsable, ArrayList<Agent> agents) {
+    public Department(int id, String name, Agent responsable, ArrayList<Agent> agents) {
         this.id = id;
         this.name = name;
         this.responsable = responsable;
