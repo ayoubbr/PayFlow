@@ -1,5 +1,4 @@
-import Controller.AgentController;
-import Controller.AuthController;
+import controller.AuthController;
 
 import java.sql.*;
 

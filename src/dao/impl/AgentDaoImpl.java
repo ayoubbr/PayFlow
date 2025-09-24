@@ -1,9 +1,9 @@
-package Dao.Impl;
+package dao.impl;
 
-import Dao.IAgentDao;
-import Model.Agent;
-import Model.TypeAgent;
-import Util.DatabaseConnection;
+import dao.IAgentDao;
+import model.Agent;
+import model.TypeAgent;
+import util.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

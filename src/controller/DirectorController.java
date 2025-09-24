@@ -1,20 +1,15 @@
-package Controller;
+package controller;
 
-import Dao.IAgentDao;
-import Dao.Impl.AgentDaoImpl;
-import Model.Agent;
-import Service.AgentService;
+import model.Agent;
+import model.Department;
 
 import java.util.Scanner;
 
-public class AgentController {
+public class DirectorController {
 
-    private AgentService agentService;
     private Scanner scanner;
 
-    public AgentController() {
-        IAgentDao agentDao = new AgentDaoImpl();
-        this.agentService = new AgentService(agentDao);
+    public DirectorController() {
         this.scanner = new Scanner(System.in);
     }
 
@@ -32,13 +27,6 @@ public class AgentController {
 
             switch (command) {
                 case 1:
-                    addAgent();
-                    break;
-                case 2:
-                    listPayments();
-                    break;
-                case 3:
-                    calculatePayment();
                     break;
                 case 0:
                     enter = false;
@@ -52,7 +40,7 @@ public class AgentController {
 
     private void displayMessage() {
         System.out.println("=================================================");
-        System.out.println("   Welcome to the Payroll Management System");
+        System.out.println("   Welcome #DIRECTEUR# to the Payroll Management System");
         System.out.println("=================================================");
     }
 
@@ -64,24 +52,16 @@ public class AgentController {
         System.out.println(" 0 - exit");
     }
 
-    public void addAgent() {
-        System.out.println("Adding a new agent: ");
+
+    public void updateDepartement(Department department) {
     }
 
-    public void listPayments() {
-        System.out.println("Listing all payments: ");
+    public void deleteDepartement(Department department) {
     }
 
-    public void calculatePayment() {
-        System.out.println("Calculating payment: ");
+    public void createDepartement(Department department) {
     }
 
-    public void getAgentInfos(Agent agent) {
-    }
-
-    public void filterAgentPayements(Agent agent, String filterBy) {
-    }
-
-    public void calculatePaymentsTotal(Agent agent) {
+    public void assignDepartement(Department department, Agent responsable) {
     }
 }

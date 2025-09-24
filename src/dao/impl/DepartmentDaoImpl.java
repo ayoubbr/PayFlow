@@ -1,7 +1,7 @@
-package Dao.Impl;
+package dao.impl;
 
-import Dao.IDepartmentDao;
-import Model.Department;
+import dao.IDepartmentDao;
+import model.Department;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
-package Service;
+package service;
 
-import Dao.IAgentDao;
-import Model.Agent;
-import Model.Department;
+import dao.IAgentDao;
+import model.Agent;
+import model.Department;
 
 import java.sql.SQLException;
 

@@ -1,8 +1,8 @@
-package Model;
+package model;
 
 public enum TypeAgent {
     OUVRIER,
-    RESPONSABLE_DEPARTMENT,
+    RESPONSABLE_DEPARTEMENT,
     DIRECTEUR,
     STAGIAIRE
 }

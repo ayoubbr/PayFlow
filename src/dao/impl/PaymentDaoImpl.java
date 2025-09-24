@@ -1,6 +1,6 @@
-package Dao.Impl;
+package dao.impl;
 
-import Dao.IPaymentDao;
+import dao.IPaymentDao;
 
 public class PaymentDaoImpl implements IPaymentDao {
 }

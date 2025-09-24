@@ -1,16 +1,15 @@
-package Controller;
+package controller;
 
-import Model.Agent;
-import Model.Department;
-import Service.AgentService;
+import model.Agent;
+import model.Department;
+import model.Payment;
 
 import java.util.Scanner;
 
-public class DirectorController {
-
+public class ResponsableController {
     private Scanner scanner;
 
-    public DirectorController() {
+    public ResponsableController() {
         this.scanner = new Scanner(System.in);
     }
 
@@ -41,7 +40,7 @@ public class DirectorController {
 
     private void displayMessage() {
         System.out.println("=================================================");
-        System.out.println("   Welcome to the Payroll Management System");
+        System.out.println("   Welcome #RESPONSABLE# to the Payroll Management System");
         System.out.println("=================================================");
     }
 
@@ -53,16 +52,28 @@ public class DirectorController {
         System.out.println(" 0 - exit");
     }
 
-
-    public void updateDepartement(Department department) {
+    public void addAgent(Agent agent) {
     }
 
-    public void deleteDepartement(Department department) {
+    public void addAgentToDepartment(Agent agent, Department department) {
     }
 
-    public void createDepartement(Department department) {
+    public void updateAgent(Agent agent) {
     }
 
-    public void assignDepartement(Department department, Agent responsable) {
+    public void removeAgent(Agent agent) {
     }
+
+    public void removeAgentFromDepartement(Agent agent, Department department) {
+    }
+
+    public void addPaymentToAgent(Agent agent, Payment payment) {
+    }
+
+    public void getAgentPayments(Agent agent) {
+    }
+
+    public void filterAgentsPayments(Agent agent, String filterBy) {
+    }
+
 }

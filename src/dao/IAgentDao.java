@@ -1,6 +1,6 @@
-package Dao;
+package dao;
 
-import Model.Agent;
+import model.Agent;
 
 import java.sql.SQLException;
 import java.util.List;
