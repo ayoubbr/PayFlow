@@ -18,7 +18,7 @@ public interface IDepartmentDao {
 
     Department getDepartmentById(int id) throws SQLException;
 
-    List<Department> getDepartmentsByName(String departmentName) throws SQLException;
+    Department getDepartmentByName(String departmentName) throws SQLException;
 
     void assignManager(Department department, Agent manager) throws SQLException;
 }

@@ -1,6 +1,7 @@
 package service.impl;
 
 import dao.IAgentDao;
+import dao.impl.AgentDaoImpl;
 import model.Agent;
 import service.IAgentService;
 
@@ -10,12 +11,10 @@ public class AgentServiceImpl implements IAgentService {
 
     private IAgentDao agentDao;
 
-    public AgentServiceImpl(IAgentDao agentDao) {
-        this.agentDao = agentDao;
+    public AgentServiceImpl() {
+        this.agentDao = new AgentDaoImpl();
     }
 
-    public AgentServiceImpl() {
-    }
 
     public void addAgent(Agent agent) {
         if (agent != null) {

@@ -16,26 +16,30 @@ public class AgentDaoImpl implements IAgentDao {
 
     static Connection connection = DatabaseConnection.getConnection();
 
-
     @Override
     public int save(Agent agent) throws SQLException {
-        String sql = "INSERT INTO agents VALUES(?,?,?,?, ?)";
+        String sql = "INSERT INTO agents (firstName, lastName, email, password, typeAgent, department_id) " +
+                "VALUES(?,?,?,?,?,?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, agent.getFirstName());
         preparedStatement.setString(2, agent.getLastName());
         preparedStatement.setString(3, agent.getEmail());
         preparedStatement.setString(4, agent.getPassword());
         preparedStatement.setString(5, String.valueOf(agent.getTypeAgent()));
-        int num = preparedStatement.executeUpdate();
-        return num;
+        if (agent.getDepartement() != null) {
+            preparedStatement.setInt(6, agent.getDepartement().getId());
+        } else {
+            preparedStatement.setNull(6, java.sql.Types.INTEGER);
+        }
+        return preparedStatement.executeUpdate();
     }
 
     @Override
-    public void delete(Agent agent) throws SQLException {
+    public int delete(Agent agent) throws SQLException {
         String sql = "DELETE FROM agents WHERE id = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1, agent.getId());
-        preparedStatement.executeUpdate();
+        return preparedStatement.executeUpdate();
     }
 
     @Override

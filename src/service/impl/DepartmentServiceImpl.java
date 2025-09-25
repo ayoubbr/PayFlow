@@ -6,6 +6,7 @@ import model.Agent;
 import model.Department;
 import service.IDepartmentService;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +57,17 @@ public class DepartmentServiceImpl implements IDepartmentService {
             e.printStackTrace();
         }
         return departments;
+    }
+
+    @Override
+    public Department getDepartmentByName(String departmentName) {
+        Department department = null;
+        try {
+            department = this.departmentDao.getDepartmentByName(departmentName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return department;
     }
 
     @Override

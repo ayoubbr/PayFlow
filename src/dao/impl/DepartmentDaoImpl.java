@@ -73,19 +73,17 @@ public class DepartmentDaoImpl implements IDepartmentDao {
     }
 
     @Override
-    public List<Department> getDepartmentsByName(String departmentName) throws SQLException {
+    public Department getDepartmentByName(String departmentName) throws SQLException {
         String sql = "select * from departments where name = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, departmentName);
         ResultSet resultSet = preparedStatement.executeQuery();
-        List<Department> departments = new ArrayList<>();
+        Department department = null;
         while (resultSet.next()) {
-            Department department = new Department();
             department.setId(resultSet.getInt("id"));
             department.setName(resultSet.getString("name"));
-            departments.add(department);
         }
-        return departments;
+        return department;
     }
 
     @Override

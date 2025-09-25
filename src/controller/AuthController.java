@@ -23,7 +23,7 @@ public class AuthController {
 
     public AuthController() {
         IAgentDao agentDao = new AgentDaoImpl();
-        this.agentService = new AgentServiceImpl(agentDao);
+        this.agentService = new AgentServiceImpl();
         this.scanner = new Scanner(System.in);
         this.agentController = new AgentController();
         this.directorController = new DirectorController();

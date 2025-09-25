@@ -9,7 +9,7 @@ public interface IAgentDao {
 
     int save(Agent agent) throws SQLException;
 
-    void delete(Agent agent) throws SQLException;
+    int delete(Agent agent) throws SQLException;
 
     List<Agent> getAll() throws SQLException;
 

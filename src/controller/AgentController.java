@@ -14,7 +14,7 @@ public class AgentController {
 
     public AgentController() {
         IAgentDao agentDao = new AgentDaoImpl();
-        this.agentServiceImpl = new AgentServiceImpl(agentDao);
+        this.agentServiceImpl = new AgentServiceImpl();
         this.scanner = new Scanner(System.in);
     }
 
