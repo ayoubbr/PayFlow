@@ -18,9 +18,10 @@ public class DepartmentDaoImpl implements IDepartmentDao {
 
     @Override
     public int saveDepartment(Department department) throws SQLException {
-        String sql = "insert into departments values(?)";
+        String sql = "insert into departments values(?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, department.getName());
+        preparedStatement.setInt(1, department.getId());
+        preparedStatement.setString(2, department.getName());
         return preparedStatement.executeUpdate();
     }
 

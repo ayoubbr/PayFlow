@@ -9,13 +9,13 @@ import java.util.stream.Stream;
 public class Main {
     public static void main(String[] args) throws SQLException {
 
-//        System.out.println("Starting PayFlow Management System...");
-//
-//        AuthController authController = new AuthController();
-//
-//        authController.startLogin();
-//
-//        System.out.println("Application has terminated.");
+        System.out.println("Starting PayFlow Management System...");
+
+        AuthController authController = new AuthController();
+
+        authController.startLogin();
+
+        System.out.println("Application has terminated.");
 
 //        List<List<String>> listOfLists = Arrays.asList(
 //                Arrays.asList("Reflection", "Collection", "Stream"),
@@ -59,15 +59,15 @@ public class Main {
 
 
 //        TRY peek
-        List<Integer> peekedList = new ArrayList<>();
-        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        List<Integer> result = numbers.stream()
-                .filter(e -> e < 3)
-                .peek(peekedList::add)
-                .collect(Collectors.toList());
-
-        System.out.println(peekedList);
-        System.out.println(result);
+//        List<Integer> peekedList = new ArrayList<>();
+//        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+//        List<Integer> result = numbers.stream()
+//                .filter(e -> e < 3)
+//                .peek(peekedList::add)
+//                .collect(Collectors.toList());
+//
+//        System.out.println(peekedList);
+//        System.out.println(result);
 
     }
 }
