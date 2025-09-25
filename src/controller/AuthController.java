@@ -4,14 +4,18 @@ import dao.IAgentDao;
 import dao.impl.AgentDaoImpl;
 import model.Agent;
 import model.TypeAgent;
-import service.AgentService;
+import service.IAgentService;
+import service.impl.AgentServiceImpl;
+import service.IAuthService;
+import service.impl.AuthServiceImpl;
 
 import java.sql.SQLException;
 import java.util.Scanner;
 
 public class AuthController {
 
-    private AgentService agentService;
+    private IAgentService agentService;
+    private IAuthService authService;
     private Scanner scanner;
     private AgentController agentController;
     private DirectorController directorController;
@@ -19,11 +23,12 @@ public class AuthController {
 
     public AuthController() {
         IAgentDao agentDao = new AgentDaoImpl();
-        this.agentService = new AgentService(agentDao);
+        this.agentService = new AgentServiceImpl(agentDao);
         this.scanner = new Scanner(System.in);
         this.agentController = new AgentController();
         this.directorController = new DirectorController();
         this.responsableController = new ResponsableController();
+        this.authService = new AuthServiceImpl(agentDao);
     }
 
     public void startLogin() throws SQLException {
@@ -57,7 +62,7 @@ public class AuthController {
         System.out.print("Enter your password: ");
         String password = scanner.nextLine().trim();
 
-        return agentService.login(email, password);
+        return authService.login(email, password);
     }
 
     private void redirect(TypeAgent typeAgent) {

@@ -3,18 +3,18 @@ package controller;
 import dao.IAgentDao;
 import dao.impl.AgentDaoImpl;
 import model.Agent;
-import service.AgentService;
+import service.impl.AgentServiceImpl;
 
 import java.util.Scanner;
 
 public class AgentController {
 
-    private AgentService agentService;
+    private AgentServiceImpl agentServiceImpl;
     private Scanner scanner;
 
     public AgentController() {
         IAgentDao agentDao = new AgentDaoImpl();
-        this.agentService = new AgentService(agentDao);
+        this.agentServiceImpl = new AgentServiceImpl(agentDao);
         this.scanner = new Scanner(System.in);
     }
 

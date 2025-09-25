@@ -1,25 +1,20 @@
-package service;
+package service.impl;
 
 import dao.IAgentDao;
 import model.Agent;
-import model.Department;
+import service.IAgentService;
 
 import java.sql.SQLException;
 
-public class AgentService {
+public class AgentServiceImpl implements IAgentService {
+
     private IAgentDao agentDao;
 
-    public AgentService(IAgentDao agentDao) {
+    public AgentServiceImpl(IAgentDao agentDao) {
         this.agentDao = agentDao;
     }
 
-    public AgentService() {
-    }
-
-    public Agent login(String email, String password) throws SQLException {
-        System.out.println("Service: Validating login credentials...");
-        Agent agent = agentDao.findByEmailAndPassword(email, password);
-        return agent;
+    public AgentServiceImpl() {
     }
 
     public void addAgent(Agent agent) {
@@ -40,9 +35,6 @@ public class AgentService {
     }
 
     public void calculatePaymentForAgent(Agent agent) {
-    }
-
-    public void assignAgentToDepartment(Agent agent, Department department) {
     }
 
 }
