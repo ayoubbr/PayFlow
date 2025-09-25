@@ -78,10 +78,16 @@ public class DepartmentDaoImpl implements IDepartmentDao {
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, departmentName);
         ResultSet resultSet = preparedStatement.executeQuery();
-        Department department = null;
-        while (resultSet.next()) {
-            department.setId(resultSet.getInt("id"));
-            department.setName(resultSet.getString("name"));
+        Department department = new Department();
+        // Check if the cursor is before the first row, indicating an empty ResultSet
+        if (!resultSet.isBeforeFirst()) {
+            System.out.println("ResultSet is empty.");
+            return null;
+        } else {
+            while (resultSet.next()) {
+                department.setId(resultSet.getInt("id"));
+                department.setName(resultSet.getString("name"));
+            }
         }
         return department;
     }

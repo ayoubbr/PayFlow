@@ -38,7 +38,7 @@ public class DirectorController {
             switch (command) {
                 case 1:
                     try {
-                        addAgent(new Agent());
+                        createManager(new Agent());
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
@@ -66,71 +66,13 @@ public class DirectorController {
 
     private void displayMenu() {
         System.out.println("\nAvailable Commands:");
-        System.out.println(" 1 - add agent");
+        System.out.println(" 1 - add manager");
         System.out.println(" 2 - add department");
 //        System.out.println(" 3 - list payments");
 //        System.out.println(" 4 - calculate payment");
         System.out.println(" 0 - exit");
     }
 
-    public void addAgent(Agent agent) throws SQLException {
-        System.out.println("Enter Agent First Name: ");
-        String firstname = scanner.next();
-        System.out.println("Enter Agent Last Name: ");
-        String lastname = scanner.next();
-        System.out.println("Enter Agent Email: ");
-        String email = scanner.next();
-        System.out.println("Enter Agent Password: ");
-        String password = scanner.next();
-        System.out.println("Enter Agent Type: ");
-        System.out.println("The Options Are :");
-        System.out.println("1 - for DIRECTEUR");
-        System.out.println("2 - for RESPONSABLE_DEPARTEMENT");
-        System.out.println("3 - for OUVRIER");
-        System.out.println("4 - for STAGIAIRE");
-        String type = "";
-        boolean enterType = true;
-        while (enterType) {
-            int option = scanner.nextInt();
-            switch (option) {
-                case 1:
-                    type = "DIRECTEUR";
-                    enterType = false;
-                    break;
-                case 2:
-                    type = "RESPONSABLE_DEPARTEMENT";
-                    enterType = false;
-                    break;
-                case 3:
-                    type = "OUVRIER";
-                    enterType = false;
-                    break;
-                case 4:
-                    type = "STAGIAIRE";
-                    enterType = false;
-                    break;
-                default:
-                    System.out.println("Invalid option. Please try again.");
-                    break;
-            }
-        }
-
-
-        System.out.println("Enter Agent Department Name: ");
-        String departmentName = scanner.next();
-
-        agent.setFirstName(firstname);
-        agent.setLastName(lastname);
-        agent.setEmail(email);
-        agent.setPassword(password);
-        agent.setTypeAgent(TypeAgent.valueOf(type));
-        Department department = this.departmentService.getDepartmentByName(departmentName);
-        agent.setDepartement(department);
-
-        this.agentService.addAgent(agent);
-
-
-    }
 
     public void updateDepartement(Department department) {
     }
@@ -155,6 +97,34 @@ public class DirectorController {
         } else {
             System.out.println("Department with name " + department.getName() + " was not added successfully.");
         }
+    }
+
+    public void createManager(Agent manager) throws SQLException {
+        System.out.println("Enter Manager First Name: ");
+        String firstname = scanner.next();
+        System.out.println("Enter Manager Last Name: ");
+        String lastname = scanner.next();
+        System.out.println("Enter Manager Email: ");
+        String email = scanner.next();
+        System.out.println("Enter Manager Password: ");
+        String password = scanner.next();
+        System.out.println("Enter Manager Department Name: ");
+        String departmentName = scanner.next();
+
+        manager.setFirstName(firstname);
+        manager.setLastName(lastname);
+        manager.setEmail(email);
+        manager.setPassword(password);
+        manager.setTypeAgent(TypeAgent.RESPONSABLE_DEPARTEMENT);
+        Department department = null;
+        try {
+            department = this.departmentService.getDepartmentByName(departmentName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        manager.setDepartement(department);
+
+        this.agentService.addAgent(manager);
     }
 
     public void assignDepartement(Department department, Agent responsable) {
