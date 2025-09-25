@@ -7,9 +7,8 @@ import java.util.List;
 
 public interface IDepartmentService {
     Department saveDepartment(Department department);
-    List<Department> getAllDepartments();
-    Department getDepartmentById(int id);
     Department updateDepartment(Department department);
     void deleteDepartment(int id);
+    List<Department> getAllDepartments();
     void assignManager(Department department, Agent manager);
 }

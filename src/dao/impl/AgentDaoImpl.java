@@ -19,13 +19,13 @@ public class AgentDaoImpl implements IAgentDao {
 
     @Override
     public int save(Agent agent) throws SQLException {
-        String sql = "INSERT INTO agents VALUES(?,?,?,?)";
+        String sql = "INSERT INTO agents VALUES(?,?,?,?, ?)";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setString(1, agent.getFirstName());
         preparedStatement.setString(2, agent.getLastName());
         preparedStatement.setString(3, agent.getEmail());
         preparedStatement.setString(4, agent.getPassword());
-
+        preparedStatement.setString(5, String.valueOf(agent.getTypeAgent()));
         int num = preparedStatement.executeUpdate();
         return num;
     }

@@ -1,5 +1,70 @@
 package service.impl;
 
-public class DepartmentServiceImpl {
+import dao.IDepartmentDao;
+import dao.impl.DepartmentDaoImpl;
+import model.Agent;
+import model.Department;
+import service.IDepartmentService;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class DepartmentServiceImpl implements IDepartmentService {
+
+    private IDepartmentDao departmentDao;
+
+    public DepartmentServiceImpl() {
+        this.departmentDao = new DepartmentDaoImpl();
+    }
+
+    @Override
+    public Department saveDepartment(Department department) {
+        try {
+            this.departmentDao.saveDepartment(department);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return department;
+    }
+
+    @Override
+    public Department updateDepartment(Department department) {
+        try {
+            this.departmentDao.updateDepartment(department);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return department;
+    }
+
+    @Override
+    public void deleteDepartment(int id) {
+        try {
+            this.departmentDao.deleteDepartment(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public List<Department> getAllDepartments() {
+        List<Department> departments = new ArrayList<>();
+        try {
+            departmentDao.getAllDepartments();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return departments;
+    }
+
+    @Override
+    public void assignManager(Department department, Agent manager) {
+        try {
+            departmentDao.assignManager(department, manager);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
 }

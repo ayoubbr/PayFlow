@@ -15,6 +15,9 @@ public class Department {
         this.agents = agents;
     }
 
+    public Department() {
+    }
+
     public int getId() {
         return id;
     }

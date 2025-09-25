@@ -7,13 +7,18 @@ import java.sql.SQLException;
 import java.util.List;
 
 public interface IDepartmentDao {
+
     int saveDepartment(Department department) throws SQLException;
-    int updateDepartment(Department department);
-    int deleteDepartment(int id);
-    void assignManager(Department department, Agent manager);
 
-    Department getDepartmentById(int id);
-    List<Department> getAllDepartments();
-    List<Department> getDepartmentsByName(String departmentName);
+    int updateDepartment(Department department) throws SQLException;
 
+    int deleteDepartment(int id) throws SQLException;
+
+    List<Department> getAllDepartments() throws SQLException;
+
+    Department getDepartmentById(int id) throws SQLException;
+
+    List<Department> getDepartmentsByName(String departmentName) throws SQLException;
+
+    void assignManager(Department department, Agent manager) throws SQLException;
 }
