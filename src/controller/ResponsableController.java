@@ -171,11 +171,15 @@ public class ResponsableController {
         this.agentService.updateAgent(agent);
     }
 
-    public void removeAgent() throws SQLException {
+    public void removeAgent() {
         System.out.println("Enter Agent Email you want to remove: ");
         String email = scanner.next();
         Agent agent = this.agentService.getAgentByEmail(email);
-        this.agentService.deleteAgent(agent);
+        try {
+            this.agentService.deleteAgent(agent);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void addAgentToDepartment(Agent loggedAgent) throws SQLException {

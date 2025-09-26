@@ -37,7 +37,12 @@ public class DepartmentServiceImpl implements IDepartmentService {
     @Override
     public Department updateDepartment(Department department) {
         try {
-            this.departmentDao.updateDepartment(department);
+            int res = this.departmentDao.updateDepartment(department);
+            if (res > 0) {
+                System.out.println("Department updated successfully");
+            } else {
+                System.out.println("Department update failed");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

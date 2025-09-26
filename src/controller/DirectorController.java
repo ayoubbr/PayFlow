@@ -9,6 +9,7 @@ import service.impl.AgentServiceImpl;
 import service.impl.DepartmentServiceImpl;
 
 import java.sql.SQLException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class DirectorController {
@@ -33,8 +34,13 @@ public class DirectorController {
         while (enter) {
             displayMenu();
             System.out.println("Enter command: ");
-            int command = scanner.nextInt();
-
+            int command = 0;
+            try {
+                command = scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input! Please enter a valid integer.");
+                scanner.next();
+            }
             switch (command) {
                 case 1:
                     try {
@@ -45,6 +51,9 @@ public class DirectorController {
                     break;
                 case 2:
                     saveDepartement();
+                    break;
+                case 3:
+                    updateDepartement();
                     break;
                 case 0:
                     enter = false;
@@ -67,7 +76,7 @@ public class DirectorController {
         System.out.println("\nAvailable Commands:");
         System.out.println(" 1 - add manager");
         System.out.println(" 2 - add department");
-//        System.out.println(" 3 - list payments");
+        System.out.println(" 3 - update department");
 //        System.out.println(" 4 - calculate payment");
         System.out.println(" 0 - exit");
     }
@@ -81,7 +90,24 @@ public class DirectorController {
         this.departmentService.saveDepartment(department);
     }
 
-    public void updateDepartement(Department department) {
+    public void updateDepartement() {
+        System.out.println("Enter department name: ");
+        String name = scanner.next();
+        scanner.nextLine();
+        try {
+            Department department = departmentService.getDepartmentByName(name);
+            if (department == null) {
+                System.out.println("Department does not exist.");
+            } else {
+                System.out.println("Enter department new name: ");
+                String newName = scanner.nextLine();
+                department.setName(newName);
+                departmentService.updateDepartment(department);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     public void deleteDepartement(Department department) {
