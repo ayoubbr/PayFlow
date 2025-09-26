@@ -44,8 +44,7 @@ public class DirectorController {
                     }
                     break;
                 case 2:
-                    Department department = new Department();
-                    createDepartement(department);
+                    saveDepartement();
                     break;
                 case 0:
                     enter = false;
@@ -73,29 +72,19 @@ public class DirectorController {
         System.out.println(" 0 - exit");
     }
 
+    public void saveDepartement() {
+        Department department = new Department();
+        System.out.println("Enter department name: ");
+        String name = scanner.next();
+        scanner.nextLine();
+        department.setName(name);
+        this.departmentService.saveDepartment(department);
+    }
+
     public void updateDepartement(Department department) {
     }
 
     public void deleteDepartement(Department department) {
-    }
-
-    public void createDepartement(Department department) {
-        System.out.println("Enter department id: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-
-        System.out.println("Enter department name: ");
-        String name = scanner.nextLine();
-
-        department.setId(id);
-        department.setName(name);
-        Department department1 = this.departmentService.saveDepartment(department);
-
-        if (department1 != null) {
-            System.out.println("Department with name " + department1.getName() + " added successfully.");
-        } else {
-            System.out.println("Department with name " + department.getName() + " was not added successfully.");
-        }
     }
 
     public void createManager(Agent manager) throws SQLException {

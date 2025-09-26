@@ -22,7 +22,12 @@ public class DepartmentServiceImpl implements IDepartmentService {
     @Override
     public Department saveDepartment(Department department) {
         try {
-            this.departmentDao.saveDepartment(department);
+            int result = this.departmentDao.saveDepartment(department);
+            if (result > 0) {
+                System.out.println("Department saved successfully");
+            } else {
+                System.out.println("Department save failed");
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
