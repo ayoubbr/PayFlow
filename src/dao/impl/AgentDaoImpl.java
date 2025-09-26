@@ -5,7 +5,6 @@ import model.Agent;
 import model.TypeAgent;
 import util.DatabaseConnection;
 
-import javax.print.DocFlavor;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -67,6 +66,7 @@ public class AgentDaoImpl implements IAgentDao {
             agent.setLastName(resultSet.getString("lastName"));
             agent.setEmail(resultSet.getString("email"));
             agent.setPassword(resultSet.getString("password"));
+            agent.setTypeAgent(TypeAgent.valueOf(resultSet.getString("typeAgent")));
             agents.add(agent);
         }
         return agents;
@@ -141,6 +141,7 @@ public class AgentDaoImpl implements IAgentDao {
 
             departementId = resultSet.getInt("department_id");
         }
+
         Map<String, Object> map = new HashMap<>();
         map.put("agent", agent);
         map.put("department_id", departementId);

@@ -10,7 +10,9 @@ import service.impl.AgentServiceImpl;
 import service.impl.DepartmentServiceImpl;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 public class ResponsableController {
     private Scanner scanner;
@@ -61,6 +63,13 @@ public class ResponsableController {
                         e.printStackTrace();
                     }
                     break;
+                case 5:
+                    try {
+                        getAllAgents();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    break;
                 case 0:
                     enter = false;
                     break;
@@ -83,6 +92,7 @@ public class ResponsableController {
         System.out.println(" 2 - update agent");
         System.out.println(" 3 - remove agent");
         System.out.println(" 4 - assign agent to department");
+        System.out.println(" 5 - see all agents");
         System.out.println(" 0 - exit");
     }
 
@@ -180,6 +190,13 @@ public class ResponsableController {
                     this.departmentService.getDepartmentByName(loggedAgent.getDepartement().getName());
             this.departmentService.assignAgent(agent, departmentByName);
         }
+    }
+
+    public void getAllAgents() throws SQLException {
+        List<Agent> allAgents = this.agentService.getAllAgents();
+        System.out.println("The agents in database: ");
+        Stream<Agent> agentStream = allAgents.stream();
+        agentStream.forEach(System.out::println);
     }
 
     public void removeAgentFromDepartement(Agent agent, Department department) {

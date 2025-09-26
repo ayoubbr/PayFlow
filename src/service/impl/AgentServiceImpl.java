@@ -7,6 +7,7 @@ import model.Department;
 import service.IAgentService;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class AgentServiceImpl implements IAgentService {
 
@@ -64,7 +65,13 @@ public class AgentServiceImpl implements IAgentService {
 
     @Override
     public Agent getAgentById(int id) {
-        return null;
+        Agent agent = null;
+        try {
+            agent = this.agentDao.findById(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return agent;
     }
 
     @Override
@@ -76,6 +83,17 @@ public class AgentServiceImpl implements IAgentService {
             e.printStackTrace();
         }
         return agent;
+    }
+
+    @Override
+    public List<Agent> getAllAgents() {
+        List<Agent> agents = null;
+        try {
+            agents = this.agentDao.getAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return agents;
     }
 
     public void calculatePaymentForAgent(Agent agent) {

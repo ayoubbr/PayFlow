@@ -4,6 +4,7 @@ import model.Agent;
 import model.Department;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public interface IAgentService {
 
@@ -16,6 +17,8 @@ public interface IAgentService {
     Agent getAgentById(int id);
 
     Agent getAgentByEmail(String email);
+
+    List<Agent> getAllAgents();
 
     void calculatePaymentForAgent(Agent agent);
 }
