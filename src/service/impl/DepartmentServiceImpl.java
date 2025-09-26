@@ -73,11 +73,31 @@ public class DepartmentServiceImpl implements IDepartmentService {
     @Override
     public void assignManager(Department department, Agent manager) {
         try {
-            departmentDao.assignManager(department, manager);
+            int result = departmentDao.assignManager(department, manager);
+            if (result == 1) {
+                System.out.println("Manager assigned successfully");
+            } else {
+                System.out.println("Manager assigning failed");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public void assignAgent(Agent agent, Department department) {
+        try {
+            int result = this.departmentDao.assignAgent(department, agent);
+            if (result == 1) {
+                System.out.println("Agent assigned successfully");
+            } else {
+                System.out.println("Agent assigning failed");
+            }
+        } catch (
+                SQLException exception) {
+            exception.printStackTrace();
+        }
     }
 
     @Override

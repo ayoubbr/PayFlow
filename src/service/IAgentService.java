@@ -1,6 +1,7 @@
 package service;
 
 import model.Agent;
+import model.Department;
 
 import java.sql.SQLException;
 

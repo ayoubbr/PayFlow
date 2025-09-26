@@ -3,6 +3,7 @@ package service.impl;
 import dao.IAgentDao;
 import dao.impl.AgentDaoImpl;
 import model.Agent;
+import model.Department;
 import service.IAgentService;
 
 import java.sql.SQLException;

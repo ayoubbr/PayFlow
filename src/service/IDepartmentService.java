@@ -12,6 +12,8 @@ public interface IDepartmentService {
     void deleteDepartment(int id);
     List<Department> getAllDepartments();
     Department getDepartmentByName(String departmentName) throws SQLException;
-    void assignManager(Department department, Agent manager);
     Department getDepartmentById(int id);
+    void assignManager(Department department, Agent manager);
+    void assignAgent(Agent agent, Department department) throws SQLException;
+
 }

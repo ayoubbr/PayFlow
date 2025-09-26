@@ -93,12 +93,21 @@ public class DepartmentDaoImpl implements IDepartmentDao {
     }
 
     @Override
-    public void assignManager(Department department, Agent manager) throws SQLException {
+    public int assignManager(Department department, Agent manager) throws SQLException {
         String sql = "update agents set department_id = ? where id = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setInt(1, department.getId());
         preparedStatement.setInt(2, manager.getId());
-        preparedStatement.executeUpdate();
+        return preparedStatement.executeUpdate();
+    }
+
+    @Override
+    public int assignAgent(Department department, Agent agent) throws SQLException {
+        String sql = "update agents set department_id = ? where id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, department.getId());
+        preparedStatement.setInt(2, agent.getId());
+        return preparedStatement.executeUpdate();
     }
 
 }

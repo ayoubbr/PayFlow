@@ -54,6 +54,13 @@ public class ResponsableController {
                         e.printStackTrace();
                     }
                     break;
+                case 4:
+                    try {
+                        addAgentToDepartment(loggedAgent);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    break;
                 case 0:
                     enter = false;
                     break;
@@ -75,7 +82,7 @@ public class ResponsableController {
         System.out.println(" 1 - add agent");
         System.out.println(" 2 - update agent");
         System.out.println(" 3 - remove agent");
-//        System.out.println(" 3 - calculate payment");
+        System.out.println(" 4 - assign agent to department");
         System.out.println(" 0 - exit");
     }
 
@@ -161,7 +168,18 @@ public class ResponsableController {
         this.agentService.deleteAgent(agent);
     }
 
-    public void addAgentToDepartment(Agent agent, Department department) {
+    public void addAgentToDepartment(Agent loggedAgent) throws SQLException {
+        System.out.println("Enter Agent Email you want to Assign to department: " + loggedAgent.getDepartement().getName());
+        String email = scanner.next();
+        Agent agent = this.agentService.getAgentByEmail(email);
+
+        if (agent == null) {
+            System.out.println("Invalid Agent Email. Please try again.");
+        } else {
+            Department departmentByName =
+                    this.departmentService.getDepartmentByName(loggedAgent.getDepartement().getName());
+            this.departmentService.assignAgent(agent, departmentByName);
+        }
     }
 
     public void removeAgentFromDepartement(Agent agent, Department department) {

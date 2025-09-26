@@ -22,5 +22,4 @@ public interface IAgentDao {
     Agent findByEmail(String email) throws SQLException;
 
     Map<String, Object> findByEmailAndPassword(String email, String password) throws SQLException;
-
 }
