@@ -33,6 +33,40 @@ public class AgentServiceImpl implements IAgentService {
         }
     }
 
+    @Override
+    public void updateAgent(Agent agent) {
+        try {
+            int a = this.agentDao.update(agent);
+            if (a > 0) {
+                System.out.println("Agent updated successfully.");
+            } else {
+                System.out.println("Agent not updated!!");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void deleteAgent(Agent agent) {
+    }
+
+    @Override
+    public Agent getAgentById(int id) {
+        return null;
+    }
+
+    @Override
+    public Agent getAgentByEmail(String email) {
+        Agent agent = null;
+        try {
+            agent = this.agentDao.findByEmail(email);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return agent;
+    }
+
     public void calculatePaymentForAgent(Agent agent) {
     }
 

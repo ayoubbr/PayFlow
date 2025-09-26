@@ -8,7 +8,8 @@ public class Agent extends Person {
     private Department department;
     private ArrayList<Payment> payments;
 
-    public Agent(String firstName, String lastName, String email, String password, int id, TypeAgent typeAgent, Department department, ArrayList<Payment> payments) {
+    public Agent(String firstName, String lastName, String email, String password,
+                 int id, TypeAgent typeAgent, Department department, ArrayList<Payment> payments) {
         super(firstName, lastName, email, password);
         this.id = id;
         this.typeAgent = typeAgent;

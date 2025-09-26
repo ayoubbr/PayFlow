@@ -18,12 +18,12 @@ public class AgentController {
         this.scanner = new Scanner(System.in);
     }
 
-    public void start() {
+    public void start(Agent agent) {
         displayMessage();
-        handleUserCommands();
+        handleUserCommands(agent);
     }
 
-    private void handleUserCommands() {
+    private void handleUserCommands(Agent LoggedAgent) {
         boolean enter = true;
         while (enter) {
             displayMenu();
@@ -32,7 +32,7 @@ public class AgentController {
 
             switch (command) {
                 case 1:
-                    addAgent();
+                    addAgent(LoggedAgent);
                     break;
                 case 2:
                     listPayments();
@@ -64,7 +64,7 @@ public class AgentController {
         System.out.println(" 0 - exit");
     }
 
-    public void addAgent() {
+    public void addAgent(Agent LoggedAgent) {
         System.out.println("Adding a new agent: ");
     }
 

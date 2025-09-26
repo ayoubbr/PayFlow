@@ -6,7 +6,15 @@ import java.sql.SQLException;
 
 public interface IAgentService {
 
-    public void addAgent(Agent agent);
+    void addAgent(Agent agent);
 
-    public void calculatePaymentForAgent(Agent agent);
+    void updateAgent(Agent agent);
+
+    void deleteAgent(Agent agent);
+
+    Agent getAgentById(int id);
+
+    Agent getAgentByEmail(String email);
+
+    void calculatePaymentForAgent(Agent agent);
 }

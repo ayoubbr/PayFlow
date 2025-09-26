@@ -73,7 +73,6 @@ public class DirectorController {
         System.out.println(" 0 - exit");
     }
 
-
     public void updateDepartement(Department department) {
     }
 

@@ -23,12 +23,12 @@ public class ResponsableController {
         this.agentService = new AgentServiceImpl();
     }
 
-    public void start() {
+    public void start(Agent loggedAgent) {
         displayMessage();
-        handleUserCommands();
+        handleUserCommands(loggedAgent);
     }
 
-    private void handleUserCommands() {
+    private void handleUserCommands(Agent loggedAgent) {
         boolean enter = true;
         while (enter) {
             displayMenu();
@@ -39,10 +39,13 @@ public class ResponsableController {
                 case 1:
                     Agent agent = new Agent();
                     try {
-                        addAgent(agent);
+                        addAgent(agent, loggedAgent);
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
+                    break;
+                case 2:
+                    updateAgent();
                     break;
                 case 0:
                     enter = false;
@@ -63,12 +66,12 @@ public class ResponsableController {
     private void displayMenu() {
         System.out.println("\nAvailable Commands:");
         System.out.println(" 1 - add agent");
-//        System.out.println(" 2 - list payments");
+        System.out.println(" 2 - update agent");
 //        System.out.println(" 3 - calculate payment");
         System.out.println(" 0 - exit");
     }
 
-    public void addAgent(Agent agent) throws SQLException {
+    public void addAgent(Agent agent, Agent loggedAgent) throws SQLException {
         System.out.println("Enter Agent First Name: ");
         String firstname = scanner.next();
         System.out.println("Enter Agent Last Name: ");
@@ -109,9 +112,9 @@ public class ResponsableController {
                     break;
             }
         }
-
-        System.out.println("Enter Agent Department Name: ");
-        String departmentName = scanner.next();
+        System.out.println("Agent loggedin email: " + loggedAgent.getEmail());
+        System.out.println("Agent loggedin department name: " + loggedAgent.getDepartement().getName());
+        String departmentName = loggedAgent.getDepartement().getName();
 
         agent.setFirstName(firstname);
         agent.setLastName(lastname);
@@ -128,7 +131,23 @@ public class ResponsableController {
     public void addAgentToDepartment(Agent agent, Department department) {
     }
 
-    public void updateAgent(Agent agent) {
+    public void updateAgent() {
+        System.out.println("Enter Agent Email: ");
+        String email = scanner.next();
+        Agent agent = this.agentService.getAgentByEmail(email);
+        System.out.println("Enter Agent New First Name: ");
+        String firstname = scanner.next();
+        System.out.println("Enter Agent New Last Name: ");
+        String lastname = scanner.next();
+        System.out.println("Enter Agent New Password: ");
+        String password = scanner.next();
+        System.out.println("Enter Agent New Email: ");
+        String email2 = scanner.next();
+        agent.setFirstName(firstname);
+        agent.setLastName(lastname);
+        agent.setEmail(email2);
+        agent.setPassword(password);
+        this.agentService.updateAgent(agent);
     }
 
     public void removeAgent(Agent agent) {

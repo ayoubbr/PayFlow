@@ -79,4 +79,15 @@ public class DepartmentServiceImpl implements IDepartmentService {
         }
 
     }
+
+    @Override
+    public Department getDepartmentById(int id) {
+        Department department = null;
+        try {
+            department = this.departmentDao.getDepartmentById(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return department;
+    }
 }
