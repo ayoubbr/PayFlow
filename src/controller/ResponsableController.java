@@ -47,6 +47,13 @@ public class ResponsableController {
                 case 2:
                     updateAgent();
                     break;
+                case 3:
+                    try {
+                        removeAgent();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                    break;
                 case 0:
                     enter = false;
                     break;
@@ -67,6 +74,7 @@ public class ResponsableController {
         System.out.println("\nAvailable Commands:");
         System.out.println(" 1 - add agent");
         System.out.println(" 2 - update agent");
+        System.out.println(" 3 - remove agent");
 //        System.out.println(" 3 - calculate payment");
         System.out.println(" 0 - exit");
     }
@@ -127,10 +135,6 @@ public class ResponsableController {
         this.agentService.addAgent(agent);
     }
 
-
-    public void addAgentToDepartment(Agent agent, Department department) {
-    }
-
     public void updateAgent() {
         System.out.println("Enter Agent Email: ");
         String email = scanner.next();
@@ -150,7 +154,14 @@ public class ResponsableController {
         this.agentService.updateAgent(agent);
     }
 
-    public void removeAgent(Agent agent) {
+    public void removeAgent() throws SQLException {
+        System.out.println("Enter Agent Email you want to remove: ");
+        String email = scanner.next();
+        Agent agent = this.agentService.getAgentByEmail(email);
+        this.agentService.deleteAgent(agent);
+    }
+
+    public void addAgentToDepartment(Agent agent, Department department) {
     }
 
     public void removeAgentFromDepartement(Agent agent, Department department) {

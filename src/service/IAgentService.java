@@ -10,7 +10,7 @@ public interface IAgentService {
 
     void updateAgent(Agent agent);
 
-    void deleteAgent(Agent agent);
+    void deleteAgent(Agent agent) throws SQLException;
 
     Agent getAgentById(int id);
 

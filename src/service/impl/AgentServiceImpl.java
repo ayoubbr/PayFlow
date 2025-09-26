@@ -48,7 +48,17 @@ public class AgentServiceImpl implements IAgentService {
     }
 
     @Override
-    public void deleteAgent(Agent agent) {
+    public void deleteAgent(Agent agent) throws SQLException {
+        if (agent != null) {
+            int result = this.agentDao.delete(agent);
+            if (result > 0) {
+                System.out.println("Agent deleted successfully.");
+            } else {
+                System.out.println("Agent not deleted!!");
+            }
+        } else {
+            System.out.println("Agent doesn't exist!");
+        }
     }
 
     @Override
