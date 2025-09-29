@@ -100,7 +100,7 @@ public class AuthController {
         directeur.setFirstName("Directeur");
         directeur.setLastName("Direceur");
         directeur.setEmail("directeur@gmail.com");
-        directeur.setPassword("123456");
+        directeur.setPassword("123");
         directeur.setTypeAgent(TypeAgent.DIRECTOR);
         directeur.setDepartement(department);
 

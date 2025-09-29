@@ -23,7 +23,6 @@ public class DepartmentServiceImpl implements IDepartmentService {
     public Department saveDepartment(Department department) {
         try {
             Department department1 = this.departmentDao.saveDepartment(department);
-            System.out.println(department1);
             if (department1 != null) {
                 System.out.println("Department saved successfully");
             } else {
