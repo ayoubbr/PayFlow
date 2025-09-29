@@ -12,9 +12,9 @@ public interface IPaymentDao {
 
     int deletePayment(String id) throws SQLException;
 
-    Payment getPaymentById(String id) throws SQLException;
-
     List<Payment> getPayments() throws SQLException;
+
+    Payment getPaymentById(String id) throws SQLException;
 
     List<Payment> getPaymentsByType(String type) throws SQLException;
 

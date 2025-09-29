@@ -54,25 +54,6 @@ public class PaymentDaoImpl implements IPaymentDao {
     }
 
     @Override
-    public Payment getPaymentById(String id) throws SQLException {
-        String sql = "SELECT * FROM payments WHERE id = ?";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, id);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        Payment payment = null;
-        if (resultSet.next()) {
-            payment.setId(resultSet.getInt("id"));
-            payment.setTypePayment(TypePayment.valueOf(resultSet.getString("typePayment")));
-            payment.setAmount(resultSet.getDouble("amount"));
-            payment.setDate(resultSet.getDate("date"));
-            payment.setMotif(resultSet.getString("motif"));
-            payment.setConditionValid(resultSet.getBoolean("conditionValid"));
-        }
-
-        return payment;
-    }
-
-    @Override
     public List<Payment> getPayments() throws SQLException {
         String sql = "SELECT * FROM payments";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
@@ -90,6 +71,25 @@ public class PaymentDaoImpl implements IPaymentDao {
             payments.add(payment);
         }
         return payments;
+    }
+
+    @Override
+    public Payment getPaymentById(String id) throws SQLException {
+        String sql = "SELECT * FROM payments WHERE id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        Payment payment = null;
+        if (resultSet.next()) {
+            payment.setId(resultSet.getInt("id"));
+            payment.setTypePayment(TypePayment.valueOf(resultSet.getString("typePayment")));
+            payment.setAmount(resultSet.getDouble("amount"));
+            payment.setDate(resultSet.getDate("date"));
+            payment.setMotif(resultSet.getString("motif"));
+            payment.setConditionValid(resultSet.getBoolean("conditionValid"));
+        }
+
+        return payment;
     }
 
     @Override
