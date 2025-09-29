@@ -105,7 +105,6 @@ public class AgentDaoImpl implements IAgentDao {
         Agent agent = new Agent();
 
         if (!resultSet.isBeforeFirst()) {
-            System.out.println("ResultSet is empty.");
             return null;
         } else {
             while (resultSet.next()) {

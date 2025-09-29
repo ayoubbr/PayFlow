@@ -1,20 +1,16 @@
 package controller;
 
-import dao.IAgentDao;
-import dao.impl.AgentDaoImpl;
 import model.Agent;
-import service.impl.AgentServiceImpl;
-
+import service.IAgentService;
 import java.util.Scanner;
 
 public class AgentController {
 
-    private AgentServiceImpl agentServiceImpl;
+    private IAgentService agentService;
     private Scanner scanner;
 
-    public AgentController() {
-        IAgentDao agentDao = new AgentDaoImpl();
-        this.agentServiceImpl = new AgentServiceImpl();
+    public AgentController(IAgentService agentService) {
+        this.agentService = agentService;
         this.scanner = new Scanner(System.in);
     }
 
@@ -48,7 +44,6 @@ public class AgentController {
             }
         }
     }
-
 
     private void displayMessage() {
         System.out.println("=================================================");

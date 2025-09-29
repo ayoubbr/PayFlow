@@ -5,8 +5,6 @@ import model.Department;
 import model.TypeAgent;
 import service.IAgentService;
 import service.IDepartmentService;
-import service.impl.AgentServiceImpl;
-import service.impl.DepartmentServiceImpl;
 
 import java.sql.SQLException;
 import java.util.InputMismatchException;
@@ -18,10 +16,10 @@ public class DirectorController {
     private IDepartmentService departmentService;
     private IAgentService agentService;
 
-    public DirectorController() {
+    public DirectorController(IDepartmentService departmentService, IAgentService agentService) {
         this.scanner = new Scanner(System.in);
-        this.departmentService = new DepartmentServiceImpl();
-        this.agentService = new AgentServiceImpl();
+        this.departmentService = departmentService;
+        this.agentService = agentService;
     }
 
     public void start() {
@@ -43,17 +41,19 @@ public class DirectorController {
             }
             switch (command) {
                 case 1:
-                    try {
-                        createManager(new Agent());
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                    createManager();
                     break;
                 case 2:
                     saveDepartement();
                     break;
                 case 3:
+                    assignManagerToDepartement();
+                    break;
+                case 4:
                     updateDepartement();
+                    break;
+                case 5:
+                    deleteDepartement();
                     break;
                 case 0:
                     enter = false;
@@ -74,10 +74,11 @@ public class DirectorController {
 
     private void displayMenu() {
         System.out.println("\nAvailable Commands:");
-        System.out.println(" 1 - add manager");
-        System.out.println(" 2 - add department");
-        System.out.println(" 3 - update department");
-//        System.out.println(" 4 - calculate payment");
+        System.out.println(" 1 - Create new manager");
+        System.out.println(" 2 - Create new department");
+        System.out.println(" 3 - Assign manager to department");
+        System.out.println(" 4 - Update department name");
+        System.out.println(" 5 - Delete department");
         System.out.println(" 0 - exit");
     }
 
@@ -110,10 +111,24 @@ public class DirectorController {
 
     }
 
-    public void deleteDepartement(Department department) {
+    public void deleteDepartement() {
+        System.out.println("Enter department name: ");
+        String name = scanner.next();
+        scanner.nextLine();
+        try {
+            Department department = departmentService.getDepartmentByName(name);
+            if (department == null) {
+                System.out.println("Department does not exist.");
+            } else {
+                departmentService.deleteDepartment(department.getId());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void createManager(Agent manager) throws SQLException {
+    public void createManager() {
+        Agent manager = new Agent();
         System.out.println("Enter Manager First Name: ");
         String firstname = scanner.next();
         System.out.println("Enter Manager Last Name: ");
@@ -129,18 +144,66 @@ public class DirectorController {
         manager.setLastName(lastname);
         manager.setEmail(email);
         manager.setPassword(password);
-        manager.setTypeAgent(TypeAgent.RESPONSABLE_DEPARTEMENT);
+        manager.setTypeAgent(TypeAgent.MANAGER);
         Department department = null;
         try {
             department = this.departmentService.getDepartmentByName(departmentName);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        manager.setDepartement(department);
 
-        this.agentService.addAgent(manager);
+        if (department == null) {
+            System.out.println("Department does not exist.");
+            System.out.println("New department will be created with the name you entered.");
+            System.out.println("Would you like to confirm it? (y/n)");
+            String answer = scanner.next();
+            if (answer.equals("y")) {
+                department = new Department();
+                department.setName(departmentName);
+                Department newDepartment = departmentService.saveDepartment(department);
+                if (newDepartment == null) {
+                    System.out.println("Department not created.");
+                } else {
+                    System.out.println(newDepartment);
+                    manager.setDepartement(newDepartment);
+                    this.agentService.saveAgent(manager);
+                }
+            } else {
+                System.out.println("Manager will not be created.");
+            }
+        } else {
+            manager.setDepartement(department);
+            this.agentService.saveAgent(manager);
+        }
     }
 
-    public void assignDepartement(Department department, Agent responsable) {
+    public void assignManagerToDepartement() {
+        System.out.println("Enter Department Name: ");
+        String departmentName = scanner.next();
+        Department department = null;
+
+        try {
+            department = departmentService.getDepartmentByName(departmentName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        if (department == null) {
+            System.out.println("Department does not exist.");
+        } else {
+            System.out.println("Enter Agent Email you want to Assign to department: " + department.getName());
+            String email = scanner.next();
+            Agent agent = this.agentService.getAgentByEmail(email);
+
+            if (agent == null) {
+                System.out.println("Invalid Agent Email. Please try again.");
+            } else {
+                try {
+                    departmentService.assignAgent(agent, department);
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
     }
 }

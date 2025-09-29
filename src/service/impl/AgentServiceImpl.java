@@ -1,6 +1,7 @@
 package service.impl;
 
 import dao.IAgentDao;
+import dao.IDepartmentDao;
 import dao.impl.AgentDaoImpl;
 import model.Agent;
 import model.Department;
@@ -12,13 +13,15 @@ import java.util.List;
 public class AgentServiceImpl implements IAgentService {
 
     private IAgentDao agentDao;
+    private IDepartmentDao departmentDao;
 
-    public AgentServiceImpl() {
-        this.agentDao = new AgentDaoImpl();
+    public AgentServiceImpl(IAgentDao agentDao, IDepartmentDao departmentDao) {
+        this.agentDao = agentDao;
+        this.departmentDao = departmentDao;
     }
 
 
-    public void addAgent(Agent agent) {
+    public void saveAgent(Agent agent) {
         if (agent != null) {
             try {
                 int num = agentDao.save(agent);
@@ -98,5 +101,4 @@ public class AgentServiceImpl implements IAgentService {
 
     public void calculatePaymentForAgent(Agent agent) {
     }
-
 }

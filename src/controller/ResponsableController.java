@@ -6,9 +6,6 @@ import model.Payment;
 import model.TypeAgent;
 import service.IAgentService;
 import service.IDepartmentService;
-import service.impl.AgentServiceImpl;
-import service.impl.DepartmentServiceImpl;
-
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
@@ -19,10 +16,10 @@ public class ResponsableController {
     private IDepartmentService departmentService;
     private IAgentService agentService;
 
-    public ResponsableController() {
+    public ResponsableController(IDepartmentService departmentService, IAgentService agentService) {
         this.scanner = new Scanner(System.in);
-        this.departmentService = new DepartmentServiceImpl();
-        this.agentService = new AgentServiceImpl();
+        this.departmentService = departmentService;
+        this.agentService = agentService;
     }
 
     public void start(Agent loggedAgent) {
@@ -50,11 +47,7 @@ public class ResponsableController {
                     updateAgent();
                     break;
                 case 3:
-                    try {
-                        removeAgent();
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
+                    removeAgent();
                     break;
                 case 4:
                     try {
@@ -79,10 +72,9 @@ public class ResponsableController {
         }
     }
 
-
     private void displayMessage() {
         System.out.println("=================================================");
-        System.out.println("   Welcome #RESPONSABLE# to the Payroll Management System");
+        System.out.println("   Welcome #MANAGER# to the Payroll Management System");
         System.out.println("=================================================");
     }
 
@@ -149,7 +141,7 @@ public class ResponsableController {
         Department department = this.departmentService.getDepartmentByName(departmentName);
         agent.setDepartement(department);
 
-        this.agentService.addAgent(agent);
+        this.agentService.saveAgent(agent);
     }
 
     public void updateAgent() {

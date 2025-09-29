@@ -15,15 +15,16 @@ public class DepartmentServiceImpl implements IDepartmentService {
 
     private IDepartmentDao departmentDao;
 
-    public DepartmentServiceImpl() {
-        this.departmentDao = new DepartmentDaoImpl();
+    public DepartmentServiceImpl(IDepartmentDao departmentDao) {
+        this.departmentDao = departmentDao;
     }
 
     @Override
     public Department saveDepartment(Department department) {
         try {
-            int result = this.departmentDao.saveDepartment(department);
-            if (result > 0) {
+            Department department1 = this.departmentDao.saveDepartment(department);
+            System.out.println(department1);
+            if (department1 != null) {
                 System.out.println("Department saved successfully");
             } else {
                 System.out.println("Department save failed");
@@ -52,7 +53,12 @@ public class DepartmentServiceImpl implements IDepartmentService {
     @Override
     public void deleteDepartment(int id) {
         try {
-            this.departmentDao.deleteDepartment(id);
+            int res = this.departmentDao.deleteDepartment(id);
+            if (res > 0) {
+                System.out.println("Department deleted successfully");
+            } else {
+                System.out.println("Department delete failed");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

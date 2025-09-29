@@ -1,4 +1,21 @@
+import controller.AgentController;
 import controller.AuthController;
+import controller.DirectorController;
+import controller.ResponsableController;
+import dao.IAgentDao;
+import dao.IAuthDao;
+import dao.IDepartmentDao;
+import dao.impl.AgentDaoImpl;
+import dao.impl.AuthDaoImpl;
+import dao.impl.DepartmentDaoImpl;
+import model.Agent;
+import model.TypeAgent;
+import service.IAgentService;
+import service.IAuthService;
+import service.IDepartmentService;
+import service.impl.AgentServiceImpl;
+import service.impl.AuthServiceImpl;
+import service.impl.DepartmentServiceImpl;
 
 import java.sql.*;
 import java.util.*;
@@ -9,13 +26,58 @@ import java.util.stream.Stream;
 public class Main {
     public static void main(String[] args) throws SQLException {
 
-        System.out.println("Starting PayFlow Management System...");
+        try {
+            System.out.println("Starting PayFlow Management System...");
 
-        AuthController authController = new AuthController();
+            IAgentDao agentDao = new AgentDaoImpl();
+            IAuthDao authDao = new AuthDaoImpl();
+            IDepartmentDao departmentDao = new DepartmentDaoImpl();
 
-        authController.startLogin();
 
-        System.out.println("Application has terminated.");
+            IAgentService agentService = new AgentServiceImpl(agentDao, departmentDao);
+            IDepartmentService departmentService = new DepartmentServiceImpl(departmentDao);
+            IAuthService authService = new AuthServiceImpl(authDao, agentDao, departmentService);
+
+            AgentController agentController = new AgentController(agentService);
+            DirectorController directorController = new DirectorController(departmentService, agentService);
+            ResponsableController responsableController = new ResponsableController(departmentService, agentService);
+
+            AuthController authController = new AuthController(
+                    agentService,
+                    authService,
+                    departmentService
+            );
+
+            // --- START APPLICATION ---
+            Agent loggedInAgent = authController.startLogin();
+
+            if (loggedInAgent != null) {
+                System.out.println("\nLogin successful! Redirecting...");
+
+                TypeAgent type = loggedInAgent.getTypeAgent();
+
+                if (type == TypeAgent.AGENT) {
+                    agentController.start(loggedInAgent);
+                } else if (type == TypeAgent.MANAGER) {
+                    responsableController.start(loggedInAgent);
+                } else if (type == TypeAgent.DIRECTOR) {
+                    directorController.start();
+                } else if (type == TypeAgent.STAGIAIRE) {
+                    System.out.println("Welcome to the Stagiaire AND bye");
+                } else {
+                    System.out.println("Invalid type agent bye");
+                }
+            } else {
+                System.out.println("\nApplication exited.");
+            }
+
+
+        } catch (SQLException e) {
+            System.err.println("Database Error during startup: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("An unexpected error occurred: " + e.getMessage());
+        }
+
 
 //        List<List<String>> listOfLists = Arrays.asList(
 //                Arrays.asList("Reflection", "Collection", "Stream"),

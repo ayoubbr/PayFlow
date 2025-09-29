@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface IDepartmentDao {
 
-    int saveDepartment(Department department) throws SQLException;
+    Department saveDepartment(Department department) throws SQLException;
 
     int updateDepartment(Department department) throws SQLException;
 

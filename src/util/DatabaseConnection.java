@@ -11,7 +11,7 @@ public class DatabaseConnection {
     static {
         String username = "root";
         String password = "";
-        String url = "jdbc:mysql://localhost:3306/payflow_db";
+        String url = "jdbc:mysql://localhost:3306/payflow";
 
         try {
 //          deprecated

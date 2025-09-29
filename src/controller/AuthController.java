@@ -1,15 +1,11 @@
 package controller;
 
-import dao.IAgentDao;
-import dao.impl.AgentDaoImpl;
 import model.Agent;
 import model.Department;
 import model.TypeAgent;
 import service.IAgentService;
-import service.impl.AgentServiceImpl;
+import service.IDepartmentService;
 import service.IAuthService;
-import service.impl.AuthServiceImpl;
-import service.impl.DepartmentServiceImpl;
 
 import java.sql.SQLException;
 import java.util.Scanner;
@@ -18,24 +14,22 @@ public class AuthController {
 
     private IAgentService agentService;
     private IAuthService authService;
-    private Scanner scanner;
+    private IDepartmentService departmentService;
     private AgentController agentController;
     private DirectorController directorController;
     private ResponsableController responsableController;
-    private DepartmentServiceImpl departmentService;
+    private Scanner scanner;
 
-    public AuthController() {
-        IAgentDao agentDao = new AgentDaoImpl();
-        this.agentService = new AgentServiceImpl();
+    public AuthController(IAgentService agentService,
+                          IAuthService authService,
+                          IDepartmentService departmentService) {
+        this.agentService = agentService;
+        this.authService = authService;
+        this.departmentService = departmentService;
         this.scanner = new Scanner(System.in);
-        this.agentController = new AgentController();
-        this.directorController = new DirectorController();
-        this.responsableController = new ResponsableController();
-        this.authService = new AuthServiceImpl(agentDao);
-        this.departmentService = new DepartmentServiceImpl();
     }
 
-    public void startLogin() throws SQLException {
+    public Agent startLogin() throws SQLException {
         Agent directeur = this.agentService.getAgentByEmail("directeur@gmail.com");
         Department department = this.departmentService.
                 getDepartmentByName("management committee");
@@ -47,18 +41,34 @@ public class AuthController {
         Agent agent = handleUserInput();
 
         if (agent.getTypeAgent() != null) {
-            redirect(agent);
+            return agent;
         } else {
             System.out.println("Invalid email or password");
             System.out.println("If you want to try again enter 1 or 0 to exit : ");
-            int choice = Integer.parseInt(scanner.nextLine().trim());
+//            int choice = Integer.parseInt(scanner.nextLine().trim());
+//
+//            switch (choice) {
+//                case 1:
+//                    startLogin();
+//                    break;
+//                case 0:
+//                    break;
+//            }
+            while (true) {
+                System.out.print("If you want to try again enter 1 or 0 to exit: ");
+                String choiceStr = scanner.nextLine().trim();
 
-            switch (choice) {
-                case 1:
-                    startLogin();
-                    break;
-                case 0:
-                    break;
+                if (choiceStr.equals("1")) {
+                    agent = handleUserInput();
+                    if (agent.getTypeAgent() != null) {
+                        return agent; // Success on retry
+                    }
+                    System.out.println("Invalid credentials again.");
+                } else if (choiceStr.equals("0")) {
+                    return null; // Exit
+                } else {
+                    System.out.println("Invalid choice. Please enter 1 or 0.");
+                }
             }
         }
     }
@@ -77,35 +87,26 @@ public class AuthController {
         return authService.login(email, password);
     }
 
-    private void redirect(Agent agent) {
-        if (agent.getTypeAgent().equals(TypeAgent.OUVRIER)) {
-            agentController.start(agent);
-        } else if (agent.getTypeAgent().equals(TypeAgent.RESPONSABLE_DEPARTEMENT)) {
-            responsableController.start(agent);
-        } else if (agent.getTypeAgent().equals(TypeAgent.DIRECTEUR)) {
-            directorController.start();
-        } else if (agent.getTypeAgent().equals(TypeAgent.STAGIAIRE)) {
-            System.out.println("Welcome to the Stagiaire AND bye");
-        } else {
-            System.out.println("Invalid type agent bye");
-        }
-    }
 
     private void initiatData() {
+        System.out.println("--- Initializing seed data (Director and Department) ---");
+
         Department department = new Department();
         department.setName("Management Committee".toLowerCase());
         department.setId(1);
 
         Agent directeur = new Agent();
+        directeur.setId(1);
         directeur.setFirstName("Directeur");
         directeur.setLastName("Direceur");
         directeur.setEmail("directeur@gmail.com");
         directeur.setPassword("123456");
-        directeur.setTypeAgent(TypeAgent.DIRECTEUR);
+        directeur.setTypeAgent(TypeAgent.DIRECTOR);
         directeur.setDepartement(department);
 
         departmentService.saveDepartment(department);
-        agentService.addAgent(directeur);
+        agentService.saveAgent(directeur);
 
+        System.out.println("--- Initialization complete ---");
     }
 }

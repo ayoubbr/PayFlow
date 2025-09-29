@@ -5,10 +5,7 @@ import model.Agent;
 import model.Department;
 import util.DatabaseConnection;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,11 +14,20 @@ public class DepartmentDaoImpl implements IDepartmentDao {
     static Connection connection = DatabaseConnection.getConnection();
 
     @Override
-    public int saveDepartment(Department department) throws SQLException {
+    public Department saveDepartment(Department department) throws SQLException {
         String sql = "insert into departments (name) values(?)";
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1, department.getName());
-        return preparedStatement.executeUpdate();
+        int affectedRows = preparedStatement.executeUpdate();
+        if (affectedRows > 0) {
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int id = generatedKeys.getInt(1);
+                    department.setId(id);
+                }
+            }
+        }
+        return department;
     }
 
     @Override
@@ -78,9 +84,7 @@ public class DepartmentDaoImpl implements IDepartmentDao {
         preparedStatement.setString(1, departmentName);
         ResultSet resultSet = preparedStatement.executeQuery();
         Department department = new Department();
-        // Check if the cursor is before the first row, indicating an empty ResultSet
         if (!resultSet.isBeforeFirst()) {
-            System.out.println("ResultSet is empty.");
             return null;
         } else {
             while (resultSet.next()) {
