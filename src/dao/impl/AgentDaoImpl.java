@@ -25,8 +25,8 @@ public class AgentDaoImpl implements IAgentDao {
         preparedStatement.setString(3, agent.getEmail());
         preparedStatement.setString(4, agent.getPassword());
         preparedStatement.setString(5, String.valueOf(agent.getTypeAgent()));
-        if (agent.getDepartement() != null) {
-            preparedStatement.setInt(6, agent.getDepartement().getId());
+        if (agent.getDepartment() != null) {
+            preparedStatement.setInt(6, agent.getDepartment().getId());
         } else {
             preparedStatement.setNull(6, java.sql.Types.INTEGER);
         }

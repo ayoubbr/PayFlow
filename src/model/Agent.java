@@ -6,6 +6,7 @@ public class Agent extends Person {
     private int id;
     private TypeAgent typeAgent;
     private Department department;
+    private int departmentId;
     private ArrayList<Payment> payments;
 
     public Agent(String firstName, String lastName, String email, String password,
@@ -36,20 +37,28 @@ public class Agent extends Person {
         this.typeAgent = typeAgent;
     }
 
-    public Department getDepartement() {
-        return department;
-    }
-
-    public void setDepartement(Department department) {
-        this.department = department;
-    }
-
     public ArrayList<Payment> getPayments() {
         return payments;
     }
 
     public void setPayments(ArrayList<Payment> payments) {
         this.payments = payments;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
+    }
+
+    public int getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(int departmentId) {
+        this.departmentId = departmentId;
     }
 
     @Override

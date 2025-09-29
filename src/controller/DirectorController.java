@@ -165,14 +165,14 @@ public class DirectorController {
                     System.out.println("Department not created.");
                 } else {
                     System.out.println(newDepartment);
-                    manager.setDepartement(newDepartment);
+                    manager.setDepartment(newDepartment);
                     this.agentService.saveAgent(manager);
                 }
             } else {
                 System.out.println("Manager will not be created.");
             }
         } else {
-            manager.setDepartement(department);
+            manager.setDepartment(department);
             this.agentService.saveAgent(manager);
         }
     }

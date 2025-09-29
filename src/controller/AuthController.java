@@ -102,7 +102,7 @@ public class AuthController {
         directeur.setEmail("directeur@gmail.com");
         directeur.setPassword("123");
         directeur.setTypeAgent(TypeAgent.DIRECTOR);
-        directeur.setDepartement(department);
+        directeur.setDepartment(department);
 
         departmentService.saveDepartment(department);
         agentService.saveAgent(directeur);

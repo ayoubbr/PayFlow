@@ -9,6 +9,7 @@ public class Payment {
     private Date date;
     private String motif;
     private Agent agent;
+    private int agentId;
     private boolean conditionValid;
 
     public Payment(int id, TypePayment typePayment, double amount, Date date, String motif, Agent agent, boolean conditionValid) {
@@ -19,6 +20,9 @@ public class Payment {
         this.motif = motif;
         this.agent = agent;
         this.conditionValid = conditionValid;
+    }
+
+    public Payment() {
     }
 
     public int getId() {
@@ -75,6 +79,14 @@ public class Payment {
 
     public void setConditionValid(boolean conditionValid) {
         this.conditionValid = conditionValid;
+    }
+
+    public int getAgentId() {
+        return agentId;
+    }
+
+    public void setAgentId(int agentId) {
+        this.agentId = agentId;
     }
 
     @Override

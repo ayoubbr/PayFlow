@@ -1,16 +1,23 @@
 package controller;
 
 import model.Agent;
+import model.Payment;
 import service.IAgentService;
+import service.IPaymentService;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class AgentController {
 
     private IAgentService agentService;
+    private IPaymentService paymentService;
     private Scanner scanner;
 
-    public AgentController(IAgentService agentService) {
+    public AgentController(IAgentService agentService, IPaymentService paymentService) {
         this.agentService = agentService;
+        this.paymentService = paymentService;
         this.scanner = new Scanner(System.in);
     }
 
@@ -28,15 +35,23 @@ public class AgentController {
 
             switch (command) {
                 case 1:
-                    addAgent(LoggedAgent);
+//                    System.out.println("Hello 1");
+                    getAgentInfos(LoggedAgent);
                     break;
                 case 2:
-                    listPayments();
+                    listPayments(LoggedAgent);
                     break;
                 case 3:
-                    calculatePayment();
+                    System.out.println("Hello 3");
+                    break;
+                case 4:
+                    System.out.println("Hello 4");
+                    break;
+                case 5:
+                    System.out.println("Hello 5");
                     break;
                 case 0:
+                    System.out.println("Goodbye");
                     enter = false;
                     break;
                 default:
@@ -53,28 +68,37 @@ public class AgentController {
 
     private void displayMenu() {
         System.out.println("\nAvailable Commands:");
-        System.out.println(" 1 - add agent");
-        System.out.println(" 2 - list payments");
-        System.out.println(" 3 - calculate payment");
+        System.out.println(" 1 - See my personal information");
+        System.out.println(" 2 - See my payments list");
+        System.out.println(" 3 - Filter my payments list");
+        System.out.println(" 4 - Sort my payments list");
+        System.out.println(" 5 - Calculate my payments total");
         System.out.println(" 0 - exit");
     }
 
-    public void addAgent(Agent LoggedAgent) {
-        System.out.println("Adding a new agent: ");
+    public void getAgentInfos(Agent loggedAgent) {
+        System.out.println("=================  Your Information:  =================\n");
+        System.out.println("Name: " + loggedAgent.getFirstName() + " " + loggedAgent.getLastName());
+        System.out.println("Email: " + loggedAgent.getEmail());
+        System.out.println("Password: " + loggedAgent.getPassword());
+        System.out.println("Agent type: " + loggedAgent.getTypeAgent());
+        System.out.println("Department: " + loggedAgent.getDepartment().getName() + "\n");
+        System.out.println("=======================================================");
     }
 
-    public void listPayments() {
-        System.out.println("Listing all payments: ");
-    }
-
-    public void calculatePayment() {
-        System.out.println("Calculating payment: ");
-    }
-
-    public void getAgentInfos(Agent agent) {
+    public void listPayments(Agent loggedAgent) {
+        List<Payment> payments = new ArrayList<>();
+//        payments =
+//                loggedAgent.setPayments();
+        System.out.println("=================  Your payments history:  =================\n");
+        System.out.println(loggedAgent.getPayments() + "\n");
+        System.out.println("=======================================================");
     }
 
     public void filterAgentPayements(Agent agent, String filterBy) {
+    }
+
+    public void sortAgentPayements(Agent agent, String sortBy) {
     }
 
     public void calculatePaymentsTotal(Agent agent) {

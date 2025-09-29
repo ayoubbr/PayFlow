@@ -13,9 +13,11 @@ import model.TypeAgent;
 import service.IAgentService;
 import service.IAuthService;
 import service.IDepartmentService;
+import service.IPaymentService;
 import service.impl.AgentServiceImpl;
 import service.impl.AuthServiceImpl;
 import service.impl.DepartmentServiceImpl;
+import service.impl.PaymentServiceImpl;
 
 import java.sql.*;
 import java.util.*;
@@ -37,8 +39,9 @@ public class Main {
             IAgentService agentService = new AgentServiceImpl(agentDao, departmentDao);
             IDepartmentService departmentService = new DepartmentServiceImpl(departmentDao);
             IAuthService authService = new AuthServiceImpl(authDao, agentDao, departmentService);
+            IPaymentService paymentService = new PaymentServiceImpl();
 
-            AgentController agentController = new AgentController(agentService);
+            AgentController agentController = new AgentController(agentService, paymentService);
             DirectorController directorController = new DirectorController(departmentService, agentService);
             ResponsableController responsableController = new ResponsableController(departmentService, agentService);
 

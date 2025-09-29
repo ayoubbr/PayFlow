@@ -26,7 +26,7 @@ public class AuthServiceImpl implements IAuthService {
         System.out.println("Service: Validating login credentials...");
         Map<String, Object> map = agentDao.findByEmailAndPassword(email, password);
         Agent agent = (Agent) map.get("agent");
-        agent.setDepartement(this.departmentService.getDepartmentById((Integer) map.get("department_id")));
+        agent.setDepartment(this.departmentService.getDepartmentById((Integer) map.get("department_id")));
         return agent;
     }
 

@@ -99,9 +99,9 @@ public class ResponsableController {
         String password = scanner.next();
         System.out.println("Enter Agent Type: ");
         System.out.println("The Options Are :");
-        System.out.println("1 - for DIRECTEUR");
-        System.out.println("2 - for RESPONSABLE_DEPARTEMENT");
-        System.out.println("3 - for OUVRIER");
+        System.out.println("1 - for DIRECTOR");
+        System.out.println("2 - for MANAGER");
+        System.out.println("3 - for AGENT");
         System.out.println("4 - for STAGIAIRE");
         String type = "";
         boolean enterType = true;
@@ -109,15 +109,15 @@ public class ResponsableController {
             int option = scanner.nextInt();
             switch (option) {
                 case 1:
-                    type = "DIRECTEUR";
+                    type = "DIRECTOR";
                     enterType = false;
                     break;
                 case 2:
-                    type = "RESPONSABLE_DEPARTEMENT";
+                    type = "MANAGER";
                     enterType = false;
                     break;
                 case 3:
-                    type = "OUVRIER";
+                    type = "AGENT";
                     enterType = false;
                     break;
                 case 4:
@@ -130,8 +130,8 @@ public class ResponsableController {
             }
         }
         System.out.println("Agent loggedin email: " + loggedAgent.getEmail());
-        System.out.println("Agent loggedin department name: " + loggedAgent.getDepartement().getName());
-        String departmentName = loggedAgent.getDepartement().getName();
+        System.out.println("Agent loggedin department name: " + loggedAgent.getDepartment().getName());
+        String departmentName = loggedAgent.getDepartment().getName();
 
         agent.setFirstName(firstname);
         agent.setLastName(lastname);
@@ -139,7 +139,7 @@ public class ResponsableController {
         agent.setPassword(password);
         agent.setTypeAgent(TypeAgent.valueOf(type));
         Department department = this.departmentService.getDepartmentByName(departmentName);
-        agent.setDepartement(department);
+        agent.setDepartment(department);
 
         this.agentService.saveAgent(agent);
     }
@@ -175,7 +175,7 @@ public class ResponsableController {
     }
 
     public void addAgentToDepartment(Agent loggedAgent) throws SQLException {
-        System.out.println("Enter Agent Email you want to Assign to department: " + loggedAgent.getDepartement().getName());
+        System.out.println("Enter Agent Email you want to Assign to department: " + loggedAgent.getDepartment().getName());
         String email = scanner.next();
         Agent agent = this.agentService.getAgentByEmail(email);
 
@@ -183,7 +183,7 @@ public class ResponsableController {
             System.out.println("Invalid Agent Email. Please try again.");
         } else {
             Department departmentByName =
-                    this.departmentService.getDepartmentByName(loggedAgent.getDepartement().getName());
+                    this.departmentService.getDepartmentByName(loggedAgent.getDepartment().getName());
             this.departmentService.assignAgent(agent, departmentByName);
         }
     }
