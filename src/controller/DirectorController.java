@@ -32,13 +32,14 @@ public class DirectorController {
         while (enter) {
             displayMenu();
             System.out.println("Enter command: ");
-            int command = 0;
+            int command = 10;
             try {
                 command = scanner.nextInt();
             } catch (InputMismatchException e) {
-                System.out.println("Invalid input! Please enter a valid integer.");
-                scanner.next();
+                System.out.println("Wrong type!!!");
+                scanner.nextLine();
             }
+
             switch (command) {
                 case 1:
                     createManager();
@@ -56,11 +57,11 @@ public class DirectorController {
                     deleteDepartement();
                     break;
                 case 0:
+                    System.out.println("Goodbye");
                     enter = false;
                     break;
                 default:
                     System.out.println("Invalid command. Please try again.");
-                    break;
             }
         }
     }

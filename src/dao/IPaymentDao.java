@@ -1,5 +1,6 @@
 package dao;
 
+import model.Agent;
 import model.Payment;
 
 import java.sql.SQLException;
@@ -12,13 +13,13 @@ public interface IPaymentDao {
 
     int deletePayment(String id) throws SQLException;
 
-    List<Payment> getPayments() throws SQLException;
+    List<Payment> getPaymentsByAgent(Agent loggedAgent) throws SQLException;
 
     Payment getPaymentById(String id) throws SQLException;
 
-    List<Payment> getPaymentsByType(String type) throws SQLException;
+    List<Payment> getPaymentsByType(Agent loggedAgent, String type) throws SQLException;
 
-    List<Payment> getPaymentsByAmount(double amount) throws SQLException;
+    List<Payment> getPaymentsByAmount(Agent loggedAgent, double amount) throws SQLException;
 
-    List<Payment> getPaymentsByDate(String date) throws SQLException;
+    List<Payment> getPaymentsByDate(Agent loggedAgent, String date) throws SQLException;
 }

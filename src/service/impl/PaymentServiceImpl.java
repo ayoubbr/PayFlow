@@ -1,11 +1,13 @@
 package service.impl;
 
 import dao.IPaymentDao;
+import model.Agent;
 import model.Payment;
 import service.IPaymentService;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class PaymentServiceImpl implements IPaymentService {
 
@@ -30,10 +32,10 @@ public class PaymentServiceImpl implements IPaymentService {
     }
 
     @Override
-    public List<Payment> getPayments() {
+    public List<Payment> getPaymentsByAgent(Agent loggedAgent) {
         List<Payment> payments = null;
         try {
-            payments = paymentDao.getPayments();
+            payments = paymentDao.getPaymentsByAgent(loggedAgent);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -52,10 +54,10 @@ public class PaymentServiceImpl implements IPaymentService {
     }
 
     @Override
-    public List<Payment> getPaymentsByType(String type) {
+    public List<Payment> getPaymentsByType(Agent loggedAgent, String type) {
         List<Payment> payments = null;
         try {
-            payments = paymentDao.getPaymentsByType(type);
+            payments = paymentDao.getPaymentsByType(loggedAgent, type);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -64,21 +66,21 @@ public class PaymentServiceImpl implements IPaymentService {
 
 
     @Override
-    public List<Payment> getPaymentsByAmount(double amount) {
+    public List<Payment> getPaymentsByAmount(Agent loggedAgent, double amount) {
         List<Payment> payments = null;
         try {
-            payments = paymentDao.getPaymentsByAmount(amount);
+            payments = paymentDao.getPaymentsByAmount(loggedAgent, amount);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
         return payments;
     }
 
     @Override
-    public List<Payment> getPaymentsByDate(String date) {
+    public List<Payment> getPaymentsByDate(Agent loggedAgent, String date) {
         List<Payment> payments = null;
         try {
-            payments = paymentDao.getPaymentsByDate(date);
+            payments = paymentDao.getPaymentsByDate(loggedAgent, date);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

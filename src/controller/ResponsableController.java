@@ -6,7 +6,9 @@ import model.Payment;
 import model.TypeAgent;
 import service.IAgentService;
 import service.IDepartmentService;
+
 import java.sql.SQLException;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Stream;
@@ -32,7 +34,14 @@ public class ResponsableController {
         while (enter) {
             displayMenu();
             System.out.println("Enter command: ");
-            int command = scanner.nextInt();
+            int command = 10;
+            try {
+                command = scanner.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Wrong type!!!");
+                scanner.nextLine();
+            }
+
 
             switch (command) {
                 case 1:

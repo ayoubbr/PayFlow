@@ -1,5 +1,6 @@
 package service;
 
+import model.Agent;
 import model.Payment;
 
 import java.util.List;
@@ -11,13 +12,13 @@ public interface IPaymentService {
 
     void deletePayment(String id);
 
-    List<Payment> getPayments();
+    List<Payment> getPaymentsByAgent(Agent loggedAgent);
 
     Payment getPaymentById(String id);
 
-    List<Payment> getPaymentsByType(String type);
+    List<Payment> getPaymentsByType(Agent loggedAgent, String type);
 
-    List<Payment> getPaymentsByAmount(double amount);
+    List<Payment> getPaymentsByAmount(Agent loggedAgent, double amount);
 
-    List<Payment> getPaymentsByDate(String date);
+    List<Payment> getPaymentsByDate(Agent loggedAgent, String date);
 }

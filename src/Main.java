@@ -5,9 +5,11 @@ import controller.ResponsableController;
 import dao.IAgentDao;
 import dao.IAuthDao;
 import dao.IDepartmentDao;
+import dao.IPaymentDao;
 import dao.impl.AgentDaoImpl;
 import dao.impl.AuthDaoImpl;
 import dao.impl.DepartmentDaoImpl;
+import dao.impl.PaymentDaoImpl;
 import model.Agent;
 import model.TypeAgent;
 import service.IAgentService;
@@ -34,12 +36,13 @@ public class Main {
             IAgentDao agentDao = new AgentDaoImpl();
             IAuthDao authDao = new AuthDaoImpl();
             IDepartmentDao departmentDao = new DepartmentDaoImpl();
+            IPaymentDao paymentDao = new PaymentDaoImpl();
 
 
             IAgentService agentService = new AgentServiceImpl(agentDao, departmentDao);
             IDepartmentService departmentService = new DepartmentServiceImpl(departmentDao);
             IAuthService authService = new AuthServiceImpl(authDao, agentDao, departmentService);
-            IPaymentService paymentService = new PaymentServiceImpl();
+            IPaymentService paymentService = new PaymentServiceImpl(paymentDao);
 
             AgentController agentController = new AgentController(agentService, paymentService);
             DirectorController directorController = new DirectorController(departmentService, agentService);

@@ -1,13 +1,14 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Agent extends Person {
     private int id;
     private TypeAgent typeAgent;
     private Department department;
     private int departmentId;
-    private ArrayList<Payment> payments;
+    private List<Payment> payments;
 
     public Agent(String firstName, String lastName, String email, String password,
                  int id, TypeAgent typeAgent, Department department, ArrayList<Payment> payments) {
@@ -37,11 +38,11 @@ public class Agent extends Person {
         this.typeAgent = typeAgent;
     }
 
-    public ArrayList<Payment> getPayments() {
+    public List<Payment> getPayments() {
         return payments;
     }
 
-    public void setPayments(ArrayList<Payment> payments) {
+    public void setPayments(List<Payment> payments) {
         this.payments = payments;
     }
 

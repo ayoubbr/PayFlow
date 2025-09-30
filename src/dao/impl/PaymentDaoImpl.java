@@ -1,6 +1,7 @@
 package dao.impl;
 
 import dao.IPaymentDao;
+import model.Agent;
 import model.Payment;
 import model.TypePayment;
 import util.DatabaseConnection;
@@ -54,9 +55,10 @@ public class PaymentDaoImpl implements IPaymentDao {
     }
 
     @Override
-    public List<Payment> getPayments() throws SQLException {
-        String sql = "SELECT * FROM payments";
+    public List<Payment> getPaymentsByAgent(Agent loggedAgent) throws SQLException {
+        String sql = "SELECT * FROM payments WHERE agent_id = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, loggedAgent.getId());
         ResultSet resultSet = preparedStatement.executeQuery();
         List<Payment> payments = new ArrayList<Payment>();
         while (resultSet.next()) {
@@ -93,10 +95,11 @@ public class PaymentDaoImpl implements IPaymentDao {
     }
 
     @Override
-    public List<Payment> getPaymentsByType(String type) throws SQLException {
-        String sql = "SELECT * FROM payments WHERE typePayment = ?";
+    public List<Payment> getPaymentsByType(Agent loggedAgent, String type) throws SQLException {
+        String sql = "SELECT * FROM payments WHERE agent_id = ? AND typePayment = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setString(1, type);
+        preparedStatement.setInt(1, loggedAgent.getId());
+        preparedStatement.setString(2, type);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<Payment> payments = new ArrayList<>();
         while (resultSet.next()) {
@@ -115,10 +118,11 @@ public class PaymentDaoImpl implements IPaymentDao {
     }
 
     @Override
-    public List<Payment> getPaymentsByAmount(double amount) throws SQLException {
-        String sql = "SELECT * FROM payments WHERE amount = ?";
+    public List<Payment> getPaymentsByAmount(Agent loggedAgent, double amount) throws SQLException {
+        String sql = "SELECT * FROM payments WHERE agent_id = ? AND amount = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setDouble(1, amount);
+        preparedStatement.setInt(1, loggedAgent.getId());
+        preparedStatement.setDouble(2, amount);
         ResultSet resultSet = preparedStatement.executeQuery();
         List<Payment> payments = new ArrayList<>();
         while (resultSet.next()) {
@@ -137,10 +141,11 @@ public class PaymentDaoImpl implements IPaymentDao {
     }
 
     @Override
-    public List<Payment> getPaymentsByDate(String date) throws SQLException {
-        String sql = "SELECT * FROM payments WHERE date = ?";
+    public List<Payment> getPaymentsByDate(Agent loggedAgent, String date) throws SQLException {
+        String sql = "SELECT * FROM payments WHERE agent_id = ? AND date = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setDate(1, Date.valueOf(date));
+        preparedStatement.setInt(1, loggedAgent.getId());
+        preparedStatement.setDate(2, Date.valueOf(date));
         ResultSet resultSet = preparedStatement.executeQuery();
         List<Payment> payments = new ArrayList<>();
         while (resultSet.next()) {

@@ -44,7 +44,6 @@ public class AuthController {
             return agent;
         } else {
             System.out.println("Invalid email or password");
-            System.out.println("If you want to try again enter 1 or 0 to exit : ");
 //            int choice = Integer.parseInt(scanner.nextLine().trim());
 //
 //            switch (choice) {
