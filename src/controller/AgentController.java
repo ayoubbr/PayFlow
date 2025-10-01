@@ -5,9 +5,6 @@ import model.Payment;
 import service.IAgentService;
 import service.IPaymentService;
 
-import javax.sound.midi.Soundbank;
-import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -52,10 +49,11 @@ public class AgentController {
                     break;
                 case 3:
                     String filterBy = filterBy();
-                    filterAgentPayements(loggedAgent, filterBy, loggedAgent);
+                    filterAgentPayments(filterBy, loggedAgent);
                     break;
                 case 4:
-                    System.out.println("Hello 4");
+                    String sortBy = sortBy();
+                    sortAgentPayments(loggedAgent, sortBy);
                     break;
                 case 5:
                     System.out.println("Hello 5");
@@ -102,34 +100,20 @@ public class AgentController {
         displayPayments(payments, loggedAgent);
     }
 
-    public void filterAgentPayements(Agent agent, String filterBy, Agent loggedAgent) {
+    public void filterAgentPayments(String filterBy, Agent loggedAgent) {
         switch (filterBy) {
             case "type":
                 System.out.println("Enter the " + filterBy + " you would like to filter by:");
                 String type = "";
-                try {
-                    type = scanner.nextLine();
-                } catch (InputMismatchException e) {
-                    System.out.println("Wrong Type!!!");
-                    System.out.println("Enter the " + filterBy + " you would like to filter by:");
-                    type = scanner.nextLine();
-                    scanner.nextLine();
-                }
+                type = scanner.nextLine();
                 List<Payment> paymentsByType = paymentService.getPaymentsByType(loggedAgent, type);
                 displayPayments(paymentsByType, loggedAgent);
                 break;
             case "amount":
                 System.out.println("Enter the " + filterBy + " you would like to filter by:");
                 double amount = 0;
-                try {
-                    amount = scanner.nextDouble();
-                    scanner.nextLine();
-                } catch (InputMismatchException e) {
-                    System.out.println("Wrong Type!!!");
-                    System.out.println("Enter the " + filterBy + " you would like to filter by:");
-                    amount = scanner.nextDouble();
-//                    here error
-                }
+                amount = scanner.nextDouble();
+                scanner.nextLine();
                 List<Payment> paymentsByAmount = paymentService.getPaymentsByAmount(loggedAgent, amount);
                 displayPayments(paymentsByAmount, loggedAgent);
                 break;
@@ -144,7 +128,23 @@ public class AgentController {
         }
     }
 
-    public void sortAgentPayements(Agent agent, String sortBy) {
+    public void sortAgentPayments(Agent loggedAgent, String sortBy) {
+        switch (sortBy) {
+            case "type":
+                List<Payment> paymentsByType = paymentService.sortPaymentsByType(loggedAgent);
+                displayPayments(paymentsByType, loggedAgent);
+                break;
+            case "amount":
+                List<Payment> paymentsByAmount = paymentService.sortPaymentsByAmount(loggedAgent);
+                displayPayments(paymentsByAmount, loggedAgent);
+                break;
+            case "date":
+                List<Payment> paymentsByDate = paymentService.sortPaymentsByDate(loggedAgent);
+                displayPayments(paymentsByDate, loggedAgent);
+                break;
+            default:
+                System.out.println("Invalid entry.");
+        }
     }
 
     public void calculatePaymentsTotal(Agent agent) {
@@ -174,6 +174,32 @@ public class AgentController {
         }
 
         return filterBy;
+    }
+
+    private String sortBy() {
+        System.out.println("Would you like to sort by : ");
+        System.out.println(" 1 - Type");
+        System.out.println(" 2 - Amount");
+        System.out.println(" 3 - Date");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        String sortBy = "";
+
+        switch (choice) {
+            case 1:
+                sortBy = "type";
+                break;
+            case 2:
+                sortBy = "amount";
+                break;
+            case 3:
+                sortBy = "date";
+                break;
+        }
+
+        return sortBy;
     }
 
     private void displayPayments(List<Payment> payments, Agent loggedAgent) {

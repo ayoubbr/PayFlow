@@ -21,4 +21,10 @@ public interface IPaymentService {
     List<Payment> getPaymentsByAmount(Agent loggedAgent, double amount);
 
     List<Payment> getPaymentsByDate(Agent loggedAgent, String date);
+
+    List<Payment> sortPaymentsByType(Agent loggedAgent);
+
+    List<Payment> sortPaymentsByAmount(Agent loggedAgent);
+
+    List<Payment> sortPaymentsByDate(Agent loggedAgent);
 }

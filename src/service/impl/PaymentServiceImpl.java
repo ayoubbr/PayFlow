@@ -6,8 +6,11 @@ import model.Payment;
 import service.IPaymentService;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class PaymentServiceImpl implements IPaymentService {
 
@@ -83,6 +86,34 @@ public class PaymentServiceImpl implements IPaymentService {
             payments = paymentDao.getPaymentsByDate(loggedAgent, date);
         } catch (SQLException e) {
             throw new RuntimeException(e);
+        }
+        return payments;
+    }
+
+    @Override
+    public List<Payment> sortPaymentsByType(Agent loggedAgent) {
+        return getPayments(loggedAgent, Comparator.comparing(Payment::getTypePayment));
+    }
+
+    @Override
+    public List<Payment> sortPaymentsByAmount(Agent loggedAgent) {
+        return getPayments(loggedAgent, Comparator.comparing(Payment::getAmount).reversed());
+    }
+
+    @Override
+    public List<Payment> sortPaymentsByDate(Agent loggedAgent) {
+        return getPayments(loggedAgent, Comparator.comparing(Payment::getDate).reversed());
+    }
+
+    private List<Payment> getPayments(Agent loggedAgent, Comparator<Payment> comparing) {
+        List<Payment> payments = new ArrayList<>();
+        try {
+            payments = paymentDao.getPaymentsByAgent(loggedAgent);
+            if (payments != null) {
+                payments = payments.stream().sorted(comparing).toList();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return payments;
     }
