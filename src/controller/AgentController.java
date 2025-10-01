@@ -56,7 +56,7 @@ public class AgentController {
                     sortAgentPayments(loggedAgent, sortBy);
                     break;
                 case 5:
-                    System.out.println("Hello 5");
+                    calculatePaymentsTotal(loggedAgent);
                     break;
                 case 0:
                     System.out.println("Goodbye");
@@ -148,6 +148,13 @@ public class AgentController {
     }
 
     public void calculatePaymentsTotal(Agent agent) {
+        System.out.println("================ Total de payments ===============\n");
+        System.out.println("Name: " + agent.getFirstName() + " " + agent.getLastName());
+        System.out.println("-------------------------------------------");
+        double totalPaymentAmount = paymentService.getTotalPaymentAmount(agent);
+        System.out.println("Total payment amount: " + totalPaymentAmount);
+        System.out.println("-------------------------------------------\n");
+        System.out.println("=================================================\n");
     }
 
     private String filterBy() {

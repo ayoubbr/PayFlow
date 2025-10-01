@@ -105,6 +105,21 @@ public class PaymentServiceImpl implements IPaymentService {
         return getPayments(loggedAgent, Comparator.comparing(Payment::getDate).reversed());
     }
 
+    @Override
+    public double getTotalPaymentAmount(Agent loggedAgent) {
+        List<Payment> paymentsByAgent = getPaymentsByAgent(loggedAgent);
+        if (paymentsByAgent.isEmpty()) {
+            return 0;
+        } else {
+
+            double totalPaymentAmount = 0;
+            for (Payment payment : paymentsByAgent) {
+                totalPaymentAmount += payment.getAmount();
+            }
+            return totalPaymentAmount;
+        }
+    }
+
     private List<Payment> getPayments(Agent loggedAgent, Comparator<Payment> comparing) {
         List<Payment> payments = new ArrayList<>();
         try {

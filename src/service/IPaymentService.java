@@ -27,4 +27,6 @@ public interface IPaymentService {
     List<Payment> sortPaymentsByAmount(Agent loggedAgent);
 
     List<Payment> sortPaymentsByDate(Agent loggedAgent);
+
+    double getTotalPaymentAmount(Agent loggedAgent);
 }
