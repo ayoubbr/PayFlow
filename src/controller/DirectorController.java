@@ -7,8 +7,7 @@ import service.IPaymentService;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class DirectorController {
 
@@ -66,6 +65,15 @@ public class DirectorController {
                 case 7:
                     numberOfPaymentByType();
                     break;
+                case 8:
+                    greatestAndLowestPayment();
+                    break;
+                case 9:
+                    totalDepartmentPayments();
+                    break;
+                case 10:
+                    averageSalaryPerDepartment();
+                    break;
                 case 0:
                     System.out.println("Goodbye");
                     enter = false;
@@ -92,6 +100,9 @@ public class DirectorController {
         System.out.println(" 5 - Delete department");
         System.out.println(" 6 - Calculate agent yearly salary");
         System.out.println(" 7 - Number of payment per type");
+        System.out.println(" 8 - Display max and min payment");
+        System.out.println(" 9 - Total of payments per department");
+        System.out.println(" 10 - Average salaries of agents in department");
         System.out.println(" 0 - exit");
     }
 
@@ -108,18 +119,15 @@ public class DirectorController {
         System.out.println("Enter department name: ");
         String name = scanner.next();
         scanner.nextLine();
-        try {
-            Department department = departmentService.getDepartmentByName(name);
-            if (department == null) {
-                System.out.println("Department does not exist.");
-            } else {
-                System.out.println("Enter department new name: ");
-                String newName = scanner.nextLine();
-                department.setName(newName);
-                departmentService.updateDepartment(department);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+        Department department = departmentService.getDepartmentByName(name);
+        if (department == null) {
+            System.out.println("Department does not exist.");
+        } else {
+            System.out.println("Enter department new name: ");
+            String newName = scanner.nextLine();
+            department.setName(newName);
+            departmentService.updateDepartment(department);
         }
 
     }
@@ -128,15 +136,12 @@ public class DirectorController {
         System.out.println("Enter department name: ");
         String name = scanner.next();
         scanner.nextLine();
-        try {
-            Department department = departmentService.getDepartmentByName(name);
-            if (department == null) {
-                System.out.println("Department does not exist.");
-            } else {
-                departmentService.deleteDepartment(department.getId());
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+
+        Department department = departmentService.getDepartmentByName(name);
+        if (department == null) {
+            System.out.println("Department does not exist.");
+        } else {
+            departmentService.deleteDepartment(department.getId());
         }
     }
 
@@ -159,11 +164,8 @@ public class DirectorController {
         manager.setPassword(password);
         manager.setTypeAgent(TypeAgent.MANAGER);
         Department department = null;
-        try {
-            department = this.departmentService.getDepartmentByName(departmentName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+
+        department = this.departmentService.getDepartmentByName(departmentName);
 
         if (department == null) {
             System.out.println("Department does not exist.");
@@ -193,13 +195,7 @@ public class DirectorController {
     private void assignManagerToDepartement() {
         System.out.println("Enter Department Name: ");
         String departmentName = scanner.next();
-        Department department = null;
-
-        try {
-            department = departmentService.getDepartmentByName(departmentName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Department department = departmentService.getDepartmentByName(departmentName);
         if (department == null) {
             System.out.println("Department does not exist.");
         } else {
@@ -340,14 +336,17 @@ public class DirectorController {
                 .filter(Payment::isConditionValid)
                 .filter(payment -> payment.getTypePayment().equals(TypePayment.BONUS))
                 .toList().size();
+
         int numberOfIndemnite = paymentService.getPaymentsByAgent(agent).stream()
                 .filter(Payment::isConditionValid)
                 .filter(payment -> payment.getTypePayment().equals(TypePayment.INDEMNITE))
                 .toList().size();
+
         int numberOfPrime = paymentService.getPaymentsByAgent(agent).stream()
                 .filter(Payment::isConditionValid)
                 .filter(payment -> payment.getTypePayment().equals(TypePayment.PRIME))
                 .toList().size();
+
         System.out.println("\n====================================");
         System.out.println(agent.getFirstName() + " " + agent.getLastName());
         System.out.println("--------------------------------------");
@@ -356,6 +355,103 @@ public class DirectorController {
         System.out.println("Number of PRIME recus: " + numberOfPrime);
         System.out.println("--------------------------------------");
         System.out.println("====================================");
+
+    }
+
+    private void greatestAndLowestPayment() {
+        System.out.println("Enter Agent Email: ");
+        String email = scanner.next();
+        Agent agent = this.agentService.getAgentByEmail(email);
+        while (agent == null) {
+            System.out.println("Invalid Agent Email. Please try again.");
+            email = scanner.next();
+            agent = this.agentService.getAgentByEmail(email);
+        }
+
+        Optional<Payment> min = paymentService.getPaymentsByAgent(agent).stream()
+                .filter(Payment::isConditionValid).min(Comparator.comparing(Payment::getAmount));
+
+        Optional<Payment> max = paymentService.getPaymentsByAgent(agent).stream()
+                .filter(Payment::isConditionValid)
+                .max(Comparator.comparing(Payment::getAmount));
+
+        System.out.println("\n====================================");
+        System.out.println(agent.getFirstName() + " " + agent.getLastName());
+        System.out.println("--------------------------------------");
+        System.out.println("Greater payment amount: " + max.get().getAmount());
+        System.out.println("Lowest payment amount : " + min.get().getAmount());
+        System.out.println("--------------------------------------");
+        System.out.println("====================================");
+    }
+
+    private void totalDepartmentPayments() {
+        System.out.println("Enter Department Name: ");
+        String departmentName = scanner.next();
+        Department department = departmentService.getDepartmentByName(departmentName);
+
+        while (department == null) {
+            System.out.println("Invalid Department Name. Please try again.");
+            departmentName = scanner.next();
+            department = departmentService.getDepartmentByName(departmentName);
+        }
+
+        Agent agent = agentService.getAgentById(department.getId());
+        if (agent == null) {
+            System.out.println("No agent in this department. Please try again.");
+        } else {
+            agent.setDepartment(department);
+            List<Payment> paymentsByDepartment = paymentService.getPaymentsByDepartment(agent);
+
+            double totalAmount = paymentsByDepartment.stream()
+                    .filter(Payment::isConditionValid)
+                    .map(Payment::getAmount)
+                    .reduce((double) 0, Double::sum);
+
+            System.out.println("\n======================================");
+            System.out.println("---------- Department: " + department.getName() + " ----------");
+            System.out.println("Total payments amount: " + totalAmount);
+            System.out.println("--------------------------------------");
+            System.out.println("======================================");
+        }
+
+    }
+
+    private void averageSalaryPerDepartment() {
+        System.out.println("Enter Department Name: ");
+        String departmentName = scanner.next();
+        Department department = departmentService.getDepartmentByName(departmentName);
+        while (department == null) {
+            System.out.println("Invalid Department Name. Please try again.");
+            departmentName = scanner.next();
+            department = departmentService.getDepartmentByName(departmentName);
+        }
+        Agent agent = agentService.getAgentById(department.getId());
+        if (agent == null) {
+            System.out.println("No agent in this department. Please try again.");
+        } else {
+            agent.setDepartment(department);
+            List<Payment> paymentsByDepartment = paymentService.getPaymentsByDepartment(agent);
+
+            double totalSalary = paymentsByDepartment.stream()
+                    .filter(Payment::isConditionValid)
+                    .filter(payment -> payment.getTypePayment().equals(TypePayment.SALAIRE))
+                    .map(Payment::getAmount)
+                    .reduce((double) 0, Double::sum);
+
+            long numberOfSalaries = paymentService.getPaymentsByAgent(agent).stream()
+                    .filter(Payment::isConditionValid)
+                    .filter(payment -> payment.getTypePayment().equals(TypePayment.SALAIRE))
+                    .count();
+
+            double avrgSalary = totalSalary / numberOfSalaries;
+
+
+            System.out.println("\n======================================");
+            System.out.println("---------- Department: " + department.getName() + " ----------");
+            System.out.println("Average salary: " + avrgSalary);
+            System.out.println("--------------------------------------");
+            System.out.println("======================================");
+        }
 
     }
 
