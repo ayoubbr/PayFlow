@@ -2,6 +2,7 @@ package dao.impl;
 
 import dao.IPaymentDao;
 import model.Agent;
+import model.Department;
 import model.Payment;
 import model.TypePayment;
 import util.DatabaseConnection;
@@ -160,6 +161,28 @@ public class PaymentDaoImpl implements IPaymentDao {
             payments.add(payment);
         }
 
+        return payments;
+    }
+
+    @Override
+    public List<Payment> getPaymentsByDepartment(Agent agent) throws SQLException {
+        System.out.println(agent);
+        String sql = "SELECT *,  departments.name as department_name FROM `payments` join agents ON agents.id = payments.agent_id join departments ON departments.id = agents.department_id WHERE department_id = ?";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setInt(1, agent.getDepartment().getId());
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<Payment> payments = new ArrayList<>();
+        while (resultSet.next()) {
+            Payment payment = new Payment();
+            payment.setId(resultSet.getInt("id"));
+            payment.setTypePayment(TypePayment.valueOf(resultSet.getString("typePayment")));
+            payment.setAmount(resultSet.getDouble("amount"));
+            payment.setDate(resultSet.getDate("date"));
+            payment.setMotif(resultSet.getString("motif"));
+            payment.setConditionValid(resultSet.getBoolean("conditionValid"));
+            payment.setAgentId(resultSet.getInt("agent_id"));
+            payments.add(payment);
+        }
         return payments;
     }
 }

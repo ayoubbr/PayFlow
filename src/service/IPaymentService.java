@@ -1,6 +1,7 @@
 package service;
 
 import model.Agent;
+import model.Department;
 import model.Payment;
 
 import java.util.List;
@@ -29,4 +30,6 @@ public interface IPaymentService {
     List<Payment> sortPaymentsByDate(Agent loggedAgent);
 
     double getTotalPaymentAmount(Agent loggedAgent);
+
+    List<Payment> getPaymentsByDepartment(Agent agent);
 }

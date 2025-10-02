@@ -80,6 +80,11 @@ public class AgentServiceImpl implements IAgentService {
         Agent agent = null;
         try {
             agent = this.agentDao.findByEmail(email);
+            if (agent != null) {
+                if (departmentDao.getDepartmentById(agent.getDepartmentId()) != null) {
+                    agent.setDepartment(departmentDao.getDepartmentById(agent.getDepartmentId()));
+                }
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }

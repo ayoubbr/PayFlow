@@ -6,6 +6,7 @@ import model.Payment;
 import model.TypeAgent;
 import service.IAgentService;
 import service.IDepartmentService;
+import service.IPaymentService;
 
 import java.sql.SQLException;
 import java.util.InputMismatchException;
@@ -17,11 +18,15 @@ public class ResponsableController {
     private Scanner scanner;
     private IDepartmentService departmentService;
     private IAgentService agentService;
+    private IPaymentService paymentService;
 
-    public ResponsableController(IDepartmentService departmentService, IAgentService agentService) {
+    public ResponsableController(IDepartmentService departmentService,
+                                 IAgentService agentService,
+                                 IPaymentService paymentService) {
         this.scanner = new Scanner(System.in);
         this.departmentService = departmentService;
         this.agentService = agentService;
+        this.paymentService = paymentService;
     }
 
     public void start(Agent loggedAgent) {
@@ -72,6 +77,12 @@ public class ResponsableController {
                         e.printStackTrace();
                     }
                     break;
+                case 6:
+                    getAgentPayments(loggedAgent);
+                    break;
+                case 7:
+                    getAgentsPayments(loggedAgent);
+                    break;
                 case 0:
                     enter = false;
                     break;
@@ -89,12 +100,14 @@ public class ResponsableController {
 
     private void displayMenu() {
         System.out.println("\nAvailable Commands:");
-        System.out.println(" 1 - add agent");
-        System.out.println(" 2 - update agent");
-        System.out.println(" 3 - remove agent");
-        System.out.println(" 4 - assign agent to department");
-        System.out.println(" 5 - see all agents");
-        System.out.println(" 0 - exit");
+        System.out.println(" 1 - Add agent");
+        System.out.println(" 2 - Update agent");
+        System.out.println(" 3 - Remove agent");
+        System.out.println(" 4 - Assign agent to department");
+        System.out.println(" 5 - See all agents");
+        System.out.println(" 6 - See agent payments");
+        System.out.println(" 7 - See department payments");
+        System.out.println(" 0 - EXIT");
     }
 
     public void addAgent(Agent agent, Agent loggedAgent) throws SQLException {
@@ -108,28 +121,18 @@ public class ResponsableController {
         String password = scanner.next();
         System.out.println("Enter Agent Type: ");
         System.out.println("The Options Are :");
-        System.out.println("1 - for DIRECTOR");
-        System.out.println("2 - for MANAGER");
-        System.out.println("3 - for AGENT");
-        System.out.println("4 - for STAGIAIRE");
+        System.out.println("1 - for AGENT");
+        System.out.println("2 - for STAGIAIRE");
         String type = "";
         boolean enterType = true;
         while (enterType) {
             int option = scanner.nextInt();
             switch (option) {
                 case 1:
-                    type = "DIRECTOR";
-                    enterType = false;
-                    break;
-                case 2:
-                    type = "MANAGER";
-                    enterType = false;
-                    break;
-                case 3:
                     type = "AGENT";
                     enterType = false;
                     break;
-                case 4:
+                case 2:
                     type = "STAGIAIRE";
                     enterType = false;
                     break;
@@ -204,16 +207,69 @@ public class ResponsableController {
         agentStream.forEach(System.out::println);
     }
 
-    public void removeAgentFromDepartement(Agent agent, Department department) {
-    }
-
     public void addPaymentToAgent(Agent agent, Payment payment) {
     }
 
-    public void getAgentPayments(Agent agent) {
+    public void getAgentPayments(Agent loggedAgent) {
+        System.out.print("Please enter agent email: ");
+        String email = scanner.next();
+        Agent agent = this.agentService.getAgentByEmail(email);
+        while (agent == null) {
+            System.out.println("Invalid Agent Email. Please try again.");
+            email = scanner.next();
+            agent = this.agentService.getAgentByEmail(email);
+        }
+        if (agent.getDepartment() == null) {
+            System.out.println("Invalid Agent Department. Please try again.");
+        } else if (agent.getDepartment().getName().equals(loggedAgent.getDepartment().getName())) {
+            List<Payment> paymentsByAgent = paymentService.getPaymentsByAgent(agent);
+            displayPayments(paymentsByAgent, agent);
+        } else {
+            System.out.println("Invalid Agent Email. Please try again.");
+        }
     }
 
-    public void filterAgentsPayments(Agent agent, String filterBy) {
+    public void getAgentsPayments(Agent loggedAgent) {
+        if (loggedAgent.getDepartment() == null) {
+            System.out.println("Invalid Agent Department. Please try again.");
+        } else {
+            List<Payment> paymentsByDepartment = paymentService.getPaymentsByDepartment(loggedAgent);
+            displayPayments(paymentsByDepartment, loggedAgent);
+        }
     }
+
+    private void displayPayments(List<Payment> payments, Agent agent) {
+        System.out.println("=================  Your payments history:  =================\n");
+        System.out.println("=========== Department : " + agent.getDepartment().getName() + " =============");
+        System.out.println("--------------------------------");
+        System.out.print("Manager name: ");
+        System.out.println(agent.getFirstName() + " " + agent.getLastName());
+        System.out.println("--------------------------------");
+        if (payments.isEmpty()) {
+            System.out.println("You have no payments.\n");
+        } else {
+            payments.forEach(payment -> {
+                System.out.println("Agent name: " + payment.getAgent().getFirstName() + " " +
+                        payment.getAgent().getLastName());
+                System.out.print("Payment Id: ");
+                System.out.print(payment.getId());
+                System.out.println(" ==> [");
+                System.out.print("Payment Type: ");
+                System.out.println(payment.getTypePayment());
+                System.out.print("Payment amount: ");
+                System.out.println(payment.getAmount());
+                System.out.print("Payment date: ");
+                System.out.println(payment.getDate());
+                System.out.print("Payment motif: ");
+                System.out.println(payment.getMotif());
+                System.out.print("Payment is valide: ");
+                System.out.print(payment.isConditionValid());
+                System.out.println(" ]");
+                System.out.println("--------------------------------\n");
+            });
+        }
+        System.out.println("=======================================================");
+    }
+
 
 }

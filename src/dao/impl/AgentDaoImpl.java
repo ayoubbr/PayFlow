@@ -113,6 +113,8 @@ public class AgentDaoImpl implements IAgentDao {
                 agent.setLastName(resultSet.getString("lastName"));
                 agent.setEmail(resultSet.getString("email"));
                 agent.setPassword(resultSet.getString("password"));
+                agent.setTypeAgent(TypeAgent.valueOf(resultSet.getString("typeAgent")));
+                agent.setDepartmentId(resultSet.getInt("department_id"));
             }
         }
 

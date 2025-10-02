@@ -1,7 +1,9 @@
 package service.impl;
 
+import dao.IAgentDao;
 import dao.IPaymentDao;
 import model.Agent;
+import model.Department;
 import model.Payment;
 import service.IPaymentService;
 
@@ -15,9 +17,11 @@ import java.util.stream.Collectors;
 public class PaymentServiceImpl implements IPaymentService {
 
     private IPaymentDao paymentDao;
+    private IAgentDao agentDao;
 
-    public PaymentServiceImpl(IPaymentDao paymentDao) {
+    public PaymentServiceImpl(IPaymentDao paymentDao, IAgentDao agentDao) {
         this.paymentDao = paymentDao;
+        this.agentDao = agentDao;
     }
 
     @Override
@@ -35,10 +39,11 @@ public class PaymentServiceImpl implements IPaymentService {
     }
 
     @Override
-    public List<Payment> getPaymentsByAgent(Agent loggedAgent) {
+    public List<Payment> getPaymentsByAgent(Agent agent) {
         List<Payment> payments = null;
         try {
-            payments = paymentDao.getPaymentsByAgent(loggedAgent);
+            payments = paymentDao.getPaymentsByAgent(agent);
+            payments.forEach(payment -> payment.setAgent(agent));
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -118,6 +123,24 @@ public class PaymentServiceImpl implements IPaymentService {
             }
             return totalPaymentAmount;
         }
+    }
+
+    @Override
+    public List<Payment> getPaymentsByDepartment(Agent agent) {
+        List<Payment> payments = null;
+        try {
+            payments = paymentDao.getPaymentsByDepartment(agent);
+            payments.forEach(payment -> {
+                try {
+                    payment.setAgent(agentDao.findById(payment.getAgentId()));
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return payments;
     }
 
     private List<Payment> getPayments(Agent loggedAgent, Comparator<Payment> comparing) {

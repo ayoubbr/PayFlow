@@ -38,11 +38,11 @@ public class Main {
             IAgentService agentService = new AgentServiceImpl(agentDao, departmentDao);
             IDepartmentService departmentService = new DepartmentServiceImpl(departmentDao);
             IAuthService authService = new AuthServiceImpl(authDao, agentDao, departmentService);
-            IPaymentService paymentService = new PaymentServiceImpl(paymentDao);
+            IPaymentService paymentService = new PaymentServiceImpl(paymentDao, agentDao);
 
             AgentController agentController = new AgentController(agentService, paymentService);
             DirectorController directorController = new DirectorController(departmentService, agentService);
-            ResponsableController responsableController = new ResponsableController(departmentService, agentService);
+            ResponsableController responsableController = new ResponsableController(departmentService, agentService, paymentService);
 
             AuthController authController = new AuthController(
                     agentService,
