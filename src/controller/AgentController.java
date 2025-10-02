@@ -84,7 +84,7 @@ public class AgentController {
         System.out.println(" 0 - exit");
     }
 
-    public void getAgentInfos(Agent loggedAgent) {
+    private void getAgentInfos(Agent loggedAgent) {
         System.out.println("=================  Your Information:  =================\n");
         System.out.println("Name: " + loggedAgent.getFirstName() + " " + loggedAgent.getLastName());
         System.out.println("Email: " + loggedAgent.getEmail());
@@ -94,13 +94,13 @@ public class AgentController {
         System.out.println("=======================================================");
     }
 
-    public void listPayments(Agent loggedAgent) {
+    private void listPayments(Agent loggedAgent) {
         List<Payment> payments = paymentService.getPaymentsByAgent(loggedAgent);
         loggedAgent.setPayments(payments);
         displayPayments(payments, loggedAgent);
     }
 
-    public void filterAgentPayments(String filterBy, Agent loggedAgent) {
+    private void filterAgentPayments(String filterBy, Agent loggedAgent) {
         switch (filterBy) {
             case "type":
                 System.out.println("Enter the " + filterBy + " you would like to filter by:");
@@ -128,7 +128,7 @@ public class AgentController {
         }
     }
 
-    public void sortAgentPayments(Agent loggedAgent, String sortBy) {
+    private void sortAgentPayments(Agent loggedAgent, String sortBy) {
         switch (sortBy) {
             case "type":
                 List<Payment> paymentsByType = paymentService.sortPaymentsByType(loggedAgent);
@@ -147,7 +147,7 @@ public class AgentController {
         }
     }
 
-    public void calculatePaymentsTotal(Agent agent) {
+    private void calculatePaymentsTotal(Agent agent) {
         System.out.println("================ Total de payments ===============\n");
         System.out.println("Name: " + agent.getFirstName() + " " + agent.getLastName());
         System.out.println("-------------------------------------------");

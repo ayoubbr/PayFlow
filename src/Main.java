@@ -41,7 +41,7 @@ public class Main {
             IPaymentService paymentService = new PaymentServiceImpl(paymentDao, agentDao);
 
             AgentController agentController = new AgentController(agentService, paymentService);
-            DirectorController directorController = new DirectorController(departmentService, agentService);
+            DirectorController directorController = new DirectorController(departmentService, agentService, paymentService);
             ResponsableController responsableController = new ResponsableController(departmentService, agentService, paymentService);
 
             AuthController authController = new AuthController(
