@@ -112,7 +112,7 @@ public class ResponsableController {
         System.out.println(" 0 - EXIT");
     }
 
-    public void addAgent(Agent agent, Agent loggedAgent) throws SQLException {
+    private void addAgent(Agent agent, Agent loggedAgent) throws SQLException {
         System.out.println("Enter Agent First Name: ");
         String firstname = scanner.next();
         System.out.println("Enter Agent Last Name: ");
@@ -158,7 +158,7 @@ public class ResponsableController {
         this.agentService.saveAgent(agent);
     }
 
-    public void updateAgent() {
+    private void updateAgent() {
         System.out.println("Enter Agent Email: ");
         String email = scanner.next();
         Agent agent = this.agentService.getAgentByEmail(email);
@@ -177,7 +177,7 @@ public class ResponsableController {
         this.agentService.updateAgent(agent);
     }
 
-    public void removeAgent() {
+    private void removeAgent() {
         System.out.println("Enter Agent Email you want to remove: ");
         String email = scanner.next();
         Agent agent = this.agentService.getAgentByEmail(email);
@@ -188,7 +188,7 @@ public class ResponsableController {
         }
     }
 
-    public void addAgentToDepartment(Agent loggedAgent) throws SQLException {
+    private void addAgentToDepartment(Agent loggedAgent) throws SQLException {
         System.out.println("Enter Agent Email you want to Assign to department: " + loggedAgent.getDepartment().getName());
         String email = scanner.next();
         Agent agent = this.agentService.getAgentByEmail(email);
@@ -202,14 +202,14 @@ public class ResponsableController {
         }
     }
 
-    public void getAllAgents() throws SQLException {
+    private void getAllAgents() throws SQLException {
         List<Agent> allAgents = this.agentService.getAllAgents();
         System.out.println("The agents in database: ");
         Stream<Agent> agentStream = allAgents.stream();
         agentStream.forEach(System.out::println);
     }
 
-    public void addPaymentToAgent(Agent loggedAgent) {
+    private void addPaymentToAgent(Agent loggedAgent) {
         System.out.println("Enter Agent Email: ");
         String email = scanner.next();
         Agent agent = this.agentService.getAgentByEmail(email);
@@ -224,7 +224,13 @@ public class ResponsableController {
         }
 
         System.out.println("Enter payment amount: ");
-        String amount = scanner.next();
+        double amount = scanner.nextDouble();
+        scanner.nextLine();
+        while (amount <= 0 || amount > 100000) {
+            System.out.println("Invalid payment amount. Please try again.");
+            amount = scanner.nextDouble();
+            scanner.nextLine();
+        }
         System.out.println("Enter payment motif: ");
         String motif = scanner.next();
         System.out.println("Enter payment type: ");
@@ -261,7 +267,8 @@ public class ResponsableController {
         }
 
         Payment payment = new Payment();
-        payment.setAmount(Double.parseDouble(amount));
+
+        payment.setAmount(amount);
         payment.setDate(LocalDate.now());
         payment.setMotif(motif);
         payment.setAgentId(loggedAgent.getId());
@@ -285,7 +292,7 @@ public class ResponsableController {
         }
     }
 
-    public void getAgentPayments(Agent loggedAgent) {
+    private void getAgentPayments(Agent loggedAgent) {
         System.out.print("Please enter agent email: ");
         String email = scanner.next();
         Agent agent = this.agentService.getAgentByEmail(email);
@@ -304,7 +311,7 @@ public class ResponsableController {
         }
     }
 
-    public void getAgentsPayments(Agent loggedAgent) {
+    private void getAgentsPayments(Agent loggedAgent) {
         if (loggedAgent.getDepartment() == null) {
             System.out.println("Invalid Agent Department. Please try again.");
         } else {
@@ -345,6 +352,5 @@ public class ResponsableController {
         }
         System.out.println("=======================================================");
     }
-
 
 }
