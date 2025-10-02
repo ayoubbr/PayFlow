@@ -20,15 +20,24 @@ public class PaymentDaoImpl implements IPaymentDao {
         String sql = "insert into payments (typePayment, amount, date, motif, conditionValid, agent_id) " +
                 "values(?,?,?,?,?,?)";
 
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        PreparedStatement preparedStatement = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
         preparedStatement.setString(1, String.valueOf(payment.getTypePayment()));
         preparedStatement.setDouble(2, payment.getAmount());
         preparedStatement.setString(3, payment.getDate().toString());
         preparedStatement.setString(4, payment.getMotif());
         preparedStatement.setBoolean(5, payment.isConditionValid());
-        preparedStatement.setInt(6, payment.getAgent().getId());
+        preparedStatement.setInt(6, payment.getAgentId());
 
-        preparedStatement.executeUpdate();
+        int affectedRows = preparedStatement.executeUpdate();
+
+        if (affectedRows > 0) {
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int generatedId = generatedKeys.getInt(1);
+                    payment.setId(generatedId);
+                }
+            }
+        }
         return payment;
     }
 
@@ -67,7 +76,7 @@ public class PaymentDaoImpl implements IPaymentDao {
             payment.setId(resultSet.getInt("id"));
             payment.setTypePayment(TypePayment.valueOf(resultSet.getString("typePayment")));
             payment.setAmount(resultSet.getDouble("amount"));
-            payment.setDate(resultSet.getDate("date"));
+            payment.setDate(resultSet.getDate("date").toLocalDate());
             payment.setMotif(resultSet.getString("motif"));
             payment.setConditionValid(resultSet.getBoolean("conditionValid"));
             payment.setAgentId(resultSet.getInt("agent_id"));
@@ -87,7 +96,7 @@ public class PaymentDaoImpl implements IPaymentDao {
             payment.setId(resultSet.getInt("id"));
             payment.setTypePayment(TypePayment.valueOf(resultSet.getString("typePayment")));
             payment.setAmount(resultSet.getDouble("amount"));
-            payment.setDate(resultSet.getDate("date"));
+            payment.setDate(resultSet.getDate("date").toLocalDate());
             payment.setMotif(resultSet.getString("motif"));
             payment.setConditionValid(resultSet.getBoolean("conditionValid"));
         }
@@ -108,7 +117,7 @@ public class PaymentDaoImpl implements IPaymentDao {
             payment.setId(resultSet.getInt("id"));
             payment.setTypePayment(TypePayment.valueOf(resultSet.getString("typePayment")));
             payment.setAmount(resultSet.getDouble("amount"));
-            payment.setDate(resultSet.getDate("date"));
+            payment.setDate(resultSet.getDate("date").toLocalDate());
             payment.setMotif(resultSet.getString("motif"));
             payment.setConditionValid(resultSet.getBoolean("conditionValid"));
             payment.setAgentId(resultSet.getInt("agent_id"));
@@ -131,7 +140,7 @@ public class PaymentDaoImpl implements IPaymentDao {
             payment.setId(resultSet.getInt("id"));
             payment.setTypePayment(TypePayment.valueOf(resultSet.getString("typePayment")));
             payment.setAmount(resultSet.getDouble("amount"));
-            payment.setDate(resultSet.getDate("date"));
+            payment.setDate(resultSet.getDate("date").toLocalDate());
             payment.setMotif(resultSet.getString("motif"));
             payment.setConditionValid(resultSet.getBoolean("conditionValid"));
             payment.setAgentId(resultSet.getInt("agent_id"));
@@ -154,7 +163,7 @@ public class PaymentDaoImpl implements IPaymentDao {
             payment.setId(resultSet.getInt("id"));
             payment.setTypePayment(TypePayment.valueOf(resultSet.getString("typePayment")));
             payment.setAmount(resultSet.getDouble("amount"));
-            payment.setDate(resultSet.getDate("date"));
+            payment.setDate(resultSet.getDate("date").toLocalDate());
             payment.setMotif(resultSet.getString("motif"));
             payment.setConditionValid(resultSet.getBoolean("conditionValid"));
             payment.setAgentId(resultSet.getInt("agent_id"));
@@ -177,7 +186,7 @@ public class PaymentDaoImpl implements IPaymentDao {
             payment.setId(resultSet.getInt("id"));
             payment.setTypePayment(TypePayment.valueOf(resultSet.getString("typePayment")));
             payment.setAmount(resultSet.getDouble("amount"));
-            payment.setDate(resultSet.getDate("date"));
+            payment.setDate(resultSet.getDate("date").toLocalDate());
             payment.setMotif(resultSet.getString("motif"));
             payment.setConditionValid(resultSet.getBoolean("conditionValid"));
             payment.setAgentId(resultSet.getInt("agent_id"));

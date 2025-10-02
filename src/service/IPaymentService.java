@@ -4,10 +4,11 @@ import model.Agent;
 import model.Department;
 import model.Payment;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public interface IPaymentService {
-    Payment createPayment(Payment payment);
+    Payment createPayment(Payment payment) throws SQLException;
 
     Payment updatePayment(Payment payment);
 

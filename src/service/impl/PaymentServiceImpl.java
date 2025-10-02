@@ -26,7 +26,12 @@ public class PaymentServiceImpl implements IPaymentService {
 
     @Override
     public Payment createPayment(Payment payment) {
-        return null;
+        try {
+            paymentDao.createPayment(payment);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return payment;
     }
 
     @Override

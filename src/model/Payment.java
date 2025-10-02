@@ -1,18 +1,19 @@
 package model;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Payment {
     private int id;
     private TypePayment typePayment;
     private double amount;
-    private Date date;
+    private LocalDate date;
     private String motif;
     private Agent agent;
     private int agentId;
     private boolean conditionValid;
 
-    public Payment(int id, TypePayment typePayment, double amount, Date date, String motif, Agent agent, boolean conditionValid) {
+    public Payment(int id, TypePayment typePayment, double amount, LocalDate date, String motif, Agent agent, boolean conditionValid) {
         this.id = id;
         this.typePayment = typePayment;
         this.amount = amount;
@@ -49,11 +50,11 @@ public class Payment {
         this.amount = amount;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

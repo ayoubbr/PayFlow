@@ -1,14 +1,12 @@
 package controller;
 
-import model.Agent;
-import model.Department;
-import model.Payment;
-import model.TypeAgent;
+import model.*;
 import service.IAgentService;
 import service.IDepartmentService;
 import service.IPaymentService;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -78,9 +76,12 @@ public class ResponsableController {
                     }
                     break;
                 case 6:
-                    getAgentPayments(loggedAgent);
+                    addPaymentToAgent(loggedAgent);
                     break;
                 case 7:
+                    getAgentPayments(loggedAgent);
+                    break;
+                case 8:
                     getAgentsPayments(loggedAgent);
                     break;
                 case 0:
@@ -105,8 +106,9 @@ public class ResponsableController {
         System.out.println(" 3 - Remove agent");
         System.out.println(" 4 - Assign agent to department");
         System.out.println(" 5 - See all agents");
-        System.out.println(" 6 - See agent payments");
-        System.out.println(" 7 - See department payments");
+        System.out.println(" 6 - Add payment to agent");
+        System.out.println(" 7 - See agent payments");
+        System.out.println(" 8 - See department payments");
         System.out.println(" 0 - EXIT");
     }
 
@@ -207,7 +209,80 @@ public class ResponsableController {
         agentStream.forEach(System.out::println);
     }
 
-    public void addPaymentToAgent(Agent agent, Payment payment) {
+    public void addPaymentToAgent(Agent loggedAgent) {
+        System.out.println("Enter Agent Email: ");
+        String email = scanner.next();
+        Agent agent = this.agentService.getAgentByEmail(email);
+        while (agent == null) {
+            System.out.println("Invalid Agent Email. Please try again.");
+            email = scanner.next();
+        }
+
+        while (!agent.getDepartment().getName().equals(loggedAgent.getDepartment().getName())) {
+            System.out.println("Invalid Agent Email. Please try again.");
+            email = scanner.next();
+        }
+
+        System.out.println("Enter payment amount: ");
+        String amount = scanner.next();
+        System.out.println("Enter payment motif: ");
+        String motif = scanner.next();
+        System.out.println("Enter payment type: ");
+        System.out.println("The Options Are :");
+        System.out.println("1 - for SALAIRE");
+        System.out.println("2 - for PRIME");
+        System.out.println("3 - for BONUS");
+        System.out.println("4 - for INDEMNITE");
+        String type = "";
+        boolean enterType = true;
+        while (enterType) {
+            String option = scanner.next();
+            switch (option) {
+                case "1":
+                    type = "SALAIRE";
+                    enterType = false;
+                    break;
+                case "2":
+                    type = "PRIME";
+                    enterType = false;
+                    break;
+                case "3":
+                    type = "BONUS";
+                    enterType = false;
+                    break;
+                case "4":
+                    type = "INDEMNITE";
+                    enterType = false;
+                    break;
+                default:
+                    System.out.println("Invalid option. Please try again.");
+            }
+
+        }
+
+        Payment payment = new Payment();
+        payment.setAmount(Double.parseDouble(amount));
+        payment.setDate(LocalDate.now());
+        payment.setMotif(motif);
+        payment.setAgentId(loggedAgent.getId());
+        payment.setTypePayment(TypePayment.valueOf(type));
+
+        if (type.equals("SALAIRE") || type.equals("PRIME")) {
+            payment.setConditionValid(true);
+        } else {
+            payment.setConditionValid(false);
+        }
+
+        try {
+            payment = paymentService.createPayment(payment);
+            if (payment == null) {
+                System.out.println("Invalid payment info. Please try again.");
+            } else {
+                System.out.println("Successfully created payment with id " + payment.getId() + " in :" + payment.getDate());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void getAgentPayments(Agent loggedAgent) {
