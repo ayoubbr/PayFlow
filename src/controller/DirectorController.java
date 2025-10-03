@@ -10,6 +10,8 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static java.lang.Math.round;
+
 public class DirectorController {
 
     private Scanner scanner;
@@ -81,6 +83,9 @@ public class DirectorController {
                 case 12:
                     numberOfAgentsAndDepartments();
                     break;
+                case 13:
+                    repartitionOfPaymentsByType();
+                    break;
                 case 0:
                     System.out.println("Goodbye");
                     enter = false;
@@ -112,6 +117,7 @@ public class DirectorController {
         System.out.println(" 10 - Average salaries of agents in department");
         System.out.println(" 11 - Sort agents by total payments amounts");
         System.out.println(" 12 - Number total of agents and departments");
+        System.out.println(" 13 - Repartition of payments by type");
         System.out.println(" 0 - exit");
     }
 
@@ -497,6 +503,25 @@ public class DirectorController {
         System.out.println("Number of agents: " + agentsNumber);
         System.out.println("Number of departments: " + departmentsNumber);
         System.out.println("---------------------------------------------\n");
+
+    }
+
+    public void repartitionOfPaymentsByType() {
+        List<Payment> allPayments = paymentService.getAllPayments().stream().filter(Payment::isConditionValid).toList();
+        long bonusCount = allPayments.stream().filter(payment -> payment.getTypePayment().equals(TypePayment.BONUS)).count();
+        long salaryCount = allPayments.stream().filter(payment -> payment.getTypePayment().equals(TypePayment.SALAIRE)).count();
+        long indemniteCount = allPayments.stream().filter(payment -> payment.getTypePayment().equals(TypePayment.INDEMNITE)).count();
+        long primeCount = allPayments.stream().filter(payment -> payment.getTypePayment().equals(TypePayment.PRIME)).count();
+        long allCount = allPayments.size();
+
+        System.out.println("===========================================");
+        System.out.println("---- Repartition of payments by type: ----");
+        System.out.println("Salary : " + round((((double) salaryCount / (double) allCount) * 100)) + "%");
+        System.out.println("Bonus : " + round((((double) bonusCount / (double) allCount) * 100)) + "%");
+        System.out.println("Indemnite : " + round((((double) indemniteCount / (double) allCount) * 100)) + "%");
+        System.out.println("Prime : " + round((((double) primeCount / (double) allCount) * 100)) + "%");
+        System.out.println("------------------------------------------");
+        System.out.println("===========================================");
 
     }
 }
