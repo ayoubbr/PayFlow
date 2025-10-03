@@ -194,4 +194,24 @@ public class PaymentDaoImpl implements IPaymentDao {
         }
         return payments;
     }
+
+    @Override
+    public List<Payment> getAllPayments() throws SQLException {
+        String sql = "SELECT * FROM payments";
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        List<Payment> payments = new ArrayList<>();
+        while (resultSet.next()) {
+            Payment payment = new Payment();
+            payment.setId(resultSet.getInt("id"));
+            payment.setTypePayment(TypePayment.valueOf(resultSet.getString("typePayment")));
+            payment.setAmount(resultSet.getDouble("amount"));
+            payment.setDate(resultSet.getDate("date").toLocalDate());
+            payment.setMotif(resultSet.getString("motif"));
+            payment.setConditionValid(resultSet.getBoolean("conditionValid"));
+            payment.setAgentId(resultSet.getInt("agent_id"));
+            payments.add(payment);
+        }
+        return payments;
+    }
 }

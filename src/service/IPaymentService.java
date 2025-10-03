@@ -33,4 +33,6 @@ public interface IPaymentService {
     double getTotalPaymentAmount(Agent loggedAgent);
 
     List<Payment> getPaymentsByDepartment(Agent agent);
+
+    List<Payment> getAllPayments();
 }

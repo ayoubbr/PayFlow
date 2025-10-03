@@ -25,4 +25,6 @@ public interface IPaymentDao {
     List<Payment> getPaymentsByDate(Agent loggedAgent, String date) throws SQLException;
 
     List<Payment> getPaymentsByDepartment(Agent agent) throws SQLException;
+
+    List<Payment> getAllPayments() throws SQLException;
 }

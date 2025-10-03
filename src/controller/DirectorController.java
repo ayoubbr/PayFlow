@@ -8,6 +8,7 @@ import service.IPaymentService;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DirectorController {
 
@@ -74,6 +75,12 @@ public class DirectorController {
                 case 10:
                     averageSalaryPerDepartment();
                     break;
+                case 11:
+                    orderingAgentsByTotalPayments();
+                    break;
+                case 12:
+                    numberOfAgentsAndDepartments();
+                    break;
                 case 0:
                     System.out.println("Goodbye");
                     enter = false;
@@ -103,6 +110,8 @@ public class DirectorController {
         System.out.println(" 8 - Display max and min payment");
         System.out.println(" 9 - Total of payments per department");
         System.out.println(" 10 - Average salaries of agents in department");
+        System.out.println(" 11 - Sort agents by total payments amounts");
+        System.out.println(" 12 - Number total of agents and departments");
         System.out.println(" 0 - exit");
     }
 
@@ -455,4 +464,39 @@ public class DirectorController {
 
     }
 
+    private void orderingAgentsByTotalPayments() {
+        List<Payment> payments = paymentService.getAllPayments();
+        payments.forEach(payment -> {
+            payment.setAgent(agentService.getAgentById(payment.getAgentId()));
+        });
+
+
+        Map<Integer, Double> paymentsGroupedByAgent = payments.stream().filter(Payment::isConditionValid)
+                .collect(Collectors.groupingBy(
+                        Payment::getAgentId, Collectors.summingDouble(Payment::getAmount)))
+                .entrySet()
+                .stream().sorted(Map.Entry.<Integer, Double>comparingByValue().reversed())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2, LinkedHashMap::new));
+
+        System.out.println("\n===================================================");
+        System.out.println("---- Order of agents by total payments recus:  ----");
+        paymentsGroupedByAgent.forEach((entry, value) -> {
+            Agent agentById = agentService.getAgentById(entry);
+            System.out.println("Agent name: " + agentById.getFirstName() + " " + agentById.getLastName());
+            System.out.println("Total payments amount: " + value);
+            System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+        });
+        System.out.println("----------------------------------------------------");
+        System.out.println("====================================================");
+    }
+
+    private void numberOfAgentsAndDepartments() {
+        int agentsNumber = agentService.getAllAgents().size();
+        int departmentsNumber = departmentService.getAllDepartments().size();
+
+        System.out.println("Number of agents: " + agentsNumber);
+        System.out.println("Number of departments: " + departmentsNumber);
+        System.out.println("---------------------------------------------\n");
+
+    }
 }

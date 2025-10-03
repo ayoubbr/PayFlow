@@ -148,6 +148,17 @@ public class PaymentServiceImpl implements IPaymentService {
         return payments;
     }
 
+    @Override
+    public List<Payment> getAllPayments() {
+        List<Payment> payments = new ArrayList<>();
+        try {
+            payments = paymentDao.getAllPayments();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return payments;
+    }
+
     private List<Payment> getPayments(Agent loggedAgent, Comparator<Payment> comparing) {
         List<Payment> payments = new ArrayList<>();
         try {
