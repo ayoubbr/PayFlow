@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static java.lang.Math.round;
 
@@ -86,6 +87,9 @@ public class DirectorController {
                 case 13:
                     repartitionOfPaymentsByType();
                     break;
+                case 14:
+                    agentWithGreatestAmount();
+                    break;
                 case 0:
                     System.out.println("Goodbye");
                     enter = false;
@@ -118,6 +122,7 @@ public class DirectorController {
         System.out.println(" 11 - Sort agents by total payments amounts");
         System.out.println(" 12 - Number total of agents and departments");
         System.out.println(" 13 - Repartition of payments by type");
+        System.out.println(" 14 - Agent with top payment amount");
         System.out.println(" 0 - exit");
     }
 
@@ -506,7 +511,7 @@ public class DirectorController {
 
     }
 
-    public void repartitionOfPaymentsByType() {
+    private void repartitionOfPaymentsByType() {
         List<Payment> allPayments = paymentService.getAllPayments().stream().filter(Payment::isConditionValid).toList();
         long bonusCount = allPayments.stream().filter(payment -> payment.getTypePayment().equals(TypePayment.BONUS)).count();
         long salaryCount = allPayments.stream().filter(payment -> payment.getTypePayment().equals(TypePayment.SALAIRE)).count();
@@ -524,4 +529,21 @@ public class DirectorController {
         System.out.println("===========================================");
 
     }
+
+    private void agentWithGreatestAmount() {
+        List<Payment> allPayments = paymentService.getAllPayments().stream().filter(Payment::isConditionValid).toList();
+        List<Payment> sorted = allPayments.stream().sorted(Comparator.comparing(Payment::getAmount).reversed()).toList();
+        Optional<Payment> first = sorted.stream().findFirst();
+        if (first.isPresent()) {
+            first.get().setAgent(agentService.getAgentById(first.get().getAgentId()));
+            System.out.println("============================================");
+            System.out.println("----- Agent with greatest amount recus: ----");
+            System.out.println("Agent name: " + first.get().getAgent().getFirstName() + " " + first.get().getAgent().getLastName());
+            System.out.println("Top amount: " + first.get().getAmount());
+            System.out.println("--------------------------------------------");
+            System.out.println("============================================");
+        }
+
+    }
+
 }
